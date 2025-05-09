@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import StatsCard from "@/components/ui/stats-card";
 import { 
@@ -16,7 +16,8 @@ import {
   Users, 
   Building2, 
   Map as MapIcon,
-  CheckSquare
+  CheckSquare,
+  ChartColumnStacked
 } from "lucide-react";
 import { 
   Table, 
@@ -26,6 +27,17 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from "recharts";
+import { ChartContainer, ChartTooltipContent, ChartTooltip } from "@/components/ui/chart";
 
 // Dados simulados para filiais
 interface Filial {
@@ -121,6 +133,23 @@ const taxaMediaSucesso = filiaisData.reduce((acc, filial) => acc + filial.taxaSu
 const AdminDashboard = () => {
   const [filtroRegiao, setFiltroRegiao] = useState<string>("todas");
   const [filiaisFiltradas, setFiliaisFiltradas] = useState<Filial[]>(filiaisData);
+  
+  // Chart config com cores
+  const chartConfig = {
+    pdvs: { color: "#10b981", label: "PDVs" },
+    conversoes: { color: "#f59e0b", label: "Conversões" },
+    taxaSucesso: { color: "#6366f1", label: "Taxa %" }
+  };
+  
+  // Preparar dados para o gráfico
+  const chartData = useMemo(() => {
+    return filiaisFiltradas.map(filial => ({
+      name: filial.nome.split(' - ')[0], // Nome abreviado para o gráfico
+      pdvs: filial.pdvs,
+      conversoes: filial.conversoes,
+      taxaSucesso: filial.taxaSucesso
+    }));
+  }, [filiaisFiltradas]);
   
   useEffect(() => {
     document.title = "Dashboard Admin | Heineken SP SUL";
@@ -243,11 +272,62 @@ const AdminDashboard = () => {
                 : `Exibindo filiais da região ${filtroRegiao}`}
             </CardDescription>
           </CardHeader>
-          <CardContent className="h-[320px] flex items-center justify-center">
-            <div className="text-center">
-              <BarChart3 className="h-16 w-16 text-heineken-neon mx-auto mb-3" />
-              <p className="text-tactical-silver">Gráfico comparativo de desempenho entre filiais</p>
-            </div>
+          <CardContent className="h-[320px]">
+            <ChartContainer config={chartConfig} className="h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 30 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                  <XAxis 
+                    dataKey="name" 
+                    tick={{ fill: '#9ca3af' }} 
+                    tickLine={{ stroke: '#4b5563' }}
+                    axisLine={{ stroke: '#4b5563' }}
+                  />
+                  <YAxis 
+                    yAxisId="left"
+                    tick={{ fill: '#9ca3af' }} 
+                    tickLine={{ stroke: '#4b5563' }}
+                    axisLine={{ stroke: '#4b5563' }}
+                  />
+                  <YAxis 
+                    yAxisId="right" 
+                    orientation="right" 
+                    domain={[0, 100]}
+                    tick={{ fill: '#9ca3af' }} 
+                    tickLine={{ stroke: '#4b5563' }}
+                    axisLine={{ stroke: '#4b5563' }}
+                  />
+                  <Tooltip 
+                    content={<ChartTooltipContent labelClassName="text-white" />}
+                  />
+                  <Legend wrapperStyle={{ paddingTop: '15px' }} />
+                  <Bar 
+                    yAxisId="left"
+                    dataKey="pdvs" 
+                    name="PDVs"
+                    fill="#10b981" 
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar 
+                    yAxisId="left"
+                    dataKey="conversoes" 
+                    name="Conversões"
+                    fill="#f59e0b" 
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar 
+                    yAxisId="right"
+                    dataKey="taxaSucesso" 
+                    name="Taxa de Sucesso (%)"
+                    fill="#6366f1" 
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>
