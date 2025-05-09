@@ -132,13 +132,35 @@ const taxaMediaSucesso = filiaisData.reduce((acc, filial) => acc + filial.taxaSu
 
 const AdminDashboard = () => {
   const [filtroRegiao, setFiltroRegiao] = useState<string>("todas");
+  const [filtroSupervisor, setFiltroSupervisor] = useState<string>("todos");
+  const [filtroFilial, setFiltroFilial] = useState<string>("todas");
+  const [filtroPeriodo, setFiltroPeriodo] = useState<string>("mes");
   const [filiaisFiltradas, setFiliaisFiltradas] = useState<Filial[]>(filiaisData);
   
-  // Chart config com cores
+  // Chart config com cores que seguem o branding do projeto
   const chartConfig = {
-    pdvs: { color: "#10b981", label: "PDVs" },
-    conversoes: { color: "#f59e0b", label: "Conversões" },
-    taxaSucesso: { color: "#6366f1", label: "Taxa %" }
+    pdvs: { color: "#00843D", label: "PDVs" },
+    conversoes: { color: "#3EFF7F", label: "Conversões" },
+    taxaSucesso: { color: "#FFD700", label: "Taxa %" }
+  };
+  
+  // Função para aplicar todos os filtros
+  const aplicarFiltros = () => {
+    let resultado = [...filiaisData];
+    
+    if (filtroRegiao !== "todas") {
+      resultado = resultado.filter(f => f.regiao === filtroRegiao);
+    }
+    
+    if (filtroSupervisor !== "todos") {
+      resultado = resultado.filter(f => f.supervisor === filtroSupervisor);
+    }
+    
+    if (filtroFilial !== "todas") {
+      resultado = resultado.filter(f => f.id === parseInt(filtroFilial));
+    }
+    
+    setFiliaisFiltradas(resultado);
   };
   
   // Preparar dados para o gráfico
@@ -150,16 +172,16 @@ const AdminDashboard = () => {
       taxaSucesso: filial.taxaSucesso
     }));
   }, [filiaisFiltradas]);
+
+  // Lista única de supervisores para o filtro
+  const supervisores = useMemo(() => {
+    return [...new Set(filiaisData.map(filial => filial.supervisor))];
+  }, []);
   
   useEffect(() => {
     document.title = "Dashboard Admin | Heineken SP SUL";
-    
-    if (filtroRegiao === "todas") {
-      setFiliaisFiltradas(filiaisData);
-    } else {
-      setFiliaisFiltradas(filiaisData.filter(f => f.regiao === filtroRegiao));
-    }
-  }, [filtroRegiao]);
+    aplicarFiltros();
+  }, [filtroRegiao, filtroSupervisor, filtroFilial]);
 
   return (
     <DashboardLayout userType="admin" pageTitle="Dashboard Administrativo">
@@ -199,7 +221,12 @@ const AdminDashboard = () => {
                 variant="outline" 
                 size="sm" 
                 className="border-heineken text-heineken-neon hover:bg-heineken/20"
-                onClick={() => setFiltroRegiao("todas")}
+                onClick={() => {
+                  setFiltroRegiao("todas");
+                  setFiltroSupervisor("todos");
+                  setFiltroFilial("todas");
+                  setFiltroPeriodo("mes");
+                }}
               >
                 Limpar
               </Button>
@@ -207,18 +234,18 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="text-sm text-tactical-silver mb-2 block">Região</label>
+              <label className="text-sm text-tactical-silver mb-2 block">Estado</label>
               <select 
                 className="w-full bg-tactical-black border border-heineken/30 rounded p-2 text-white"
                 onChange={(e) => setFiltroRegiao(e.target.value)}
                 value={filtroRegiao}
               >
-                <option value="todas">Todas</option>
-                <option value="Sudeste">Sudeste</option>
-                <option value="Sul">Sul</option>
-                <option value="Nordeste">Nordeste</option>
-                <option value="Norte">Norte</option>
-                <option value="Centro-Oeste">Centro-Oeste</option>
+                <option value="todas">Todos</option>
+                <option value="Sudeste">São Paulo</option>
+                <option value="Sul">Rio Grande do Sul</option>
+                <option value="Nordeste">Bahia</option>
+                <option value="Norte">Pará</option>
+                <option value="Centro-Oeste">Goiás</option>
               </select>
             </div>
             
@@ -226,7 +253,8 @@ const AdminDashboard = () => {
               <label className="text-sm text-tactical-silver mb-2 block">Filial</label>
               <select 
                 className="w-full bg-tactical-black border border-heineken/30 rounded p-2 text-white"
-                defaultValue="todas"
+                onChange={(e) => setFiltroFilial(e.target.value)}
+                value={filtroFilial}
               >
                 <option value="todas">Todas</option>
                 {filiaisData.map(filial => (
@@ -239,11 +267,12 @@ const AdminDashboard = () => {
               <label className="text-sm text-tactical-silver mb-2 block">Supervisor</label>
               <select 
                 className="w-full bg-tactical-black border border-heineken/30 rounded p-2 text-white"
-                defaultValue="todos"
+                onChange={(e) => setFiltroSupervisor(e.target.value)}
+                value={filtroSupervisor}
               >
                 <option value="todos">Todos</option>
-                {filiaisData.map(filial => (
-                  <option key={filial.id} value={filial.supervisor}>{filial.supervisor}</option>
+                {supervisores.map((supervisor, idx) => (
+                  <option key={idx} value={supervisor}>{supervisor}</option>
                 ))}
               </select>
             </div>
@@ -252,7 +281,8 @@ const AdminDashboard = () => {
               <label className="text-sm text-tactical-silver mb-2 block">Período</label>
               <select 
                 className="w-full bg-tactical-black border border-heineken/30 rounded p-2 text-white"
-                defaultValue="mes"
+                onChange={(e) => setFiltroPeriodo(e.target.value)}
+                value={filtroPeriodo}
               >
                 <option value="semana">Última semana</option>
                 <option value="mes">Último mês</option>
@@ -264,70 +294,99 @@ const AdminDashboard = () => {
         </Card>
         
         <Card className="bg-tactical-darkgray/80 border-heineken/30 lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-lg">Desempenho por Filial</CardTitle>
+          <CardHeader className="border-b border-heineken/10 pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <ChartColumnStacked className="text-heineken-neon" />
+              Desempenho por Filial
+            </CardTitle>
             <CardDescription>
               {filtroRegiao === "todas" 
-                ? "Exibindo todas as filiais" 
-                : `Exibindo filiais da região ${filtroRegiao}`}
+                ? "Exibindo todos os estados" 
+                : `Exibindo filiais do estado: ${filtroRegiao}`}
             </CardDescription>
           </CardHeader>
-          <CardContent className="h-[320px]">
-            <ChartContainer config={chartConfig} className="h-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={chartData}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 30 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                  <XAxis 
-                    dataKey="name" 
-                    tick={{ fill: '#9ca3af' }} 
-                    tickLine={{ stroke: '#4b5563' }}
-                    axisLine={{ stroke: '#4b5563' }}
-                  />
-                  <YAxis 
-                    yAxisId="left"
-                    tick={{ fill: '#9ca3af' }} 
-                    tickLine={{ stroke: '#4b5563' }}
-                    axisLine={{ stroke: '#4b5563' }}
-                  />
-                  <YAxis 
-                    yAxisId="right" 
-                    orientation="right" 
-                    domain={[0, 100]}
-                    tick={{ fill: '#9ca3af' }} 
-                    tickLine={{ stroke: '#4b5563' }}
-                    axisLine={{ stroke: '#4b5563' }}
-                  />
-                  <Tooltip 
-                    content={<ChartTooltipContent labelClassName="text-white" />}
-                  />
-                  <Legend wrapperStyle={{ paddingTop: '15px' }} />
-                  <Bar 
-                    yAxisId="left"
-                    dataKey="pdvs" 
-                    name="PDVs"
-                    fill="#10b981" 
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar 
-                    yAxisId="left"
-                    dataKey="conversoes" 
-                    name="Conversões"
-                    fill="#f59e0b" 
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar 
-                    yAxisId="right"
-                    dataKey="taxaSucesso" 
-                    name="Taxa de Sucesso (%)"
-                    fill="#6366f1" 
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+          <CardContent className="h-[320px] pt-4">
+            {chartData.length > 0 ? (
+              <ChartContainer config={chartConfig} className="h-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={chartData}
+                    margin={{ top: 15, right: 30, left: 5, bottom: 25 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#333" opacity={0.5} />
+                    <XAxis 
+                      dataKey="name" 
+                      tick={{ fill: '#ccc', fontSize: 11 }} 
+                      tickLine={{ stroke: '#4b5563' }}
+                      axisLine={{ stroke: '#4b5563' }}
+                      height={40}
+                      angle={-15}
+                      textAnchor="end"
+                    />
+                    <YAxis 
+                      yAxisId="left"
+                      tick={{ fill: '#ccc' }} 
+                      tickLine={{ stroke: '#4b5563' }}
+                      axisLine={{ stroke: '#4b5563' }}
+                    />
+                    <YAxis 
+                      yAxisId="right" 
+                      orientation="right" 
+                      domain={[0, 100]}
+                      tick={{ fill: '#ccc' }} 
+                      tickLine={{ stroke: '#4b5563' }}
+                      axisLine={{ stroke: '#4b5563' }}
+                    />
+                    <Tooltip 
+                      cursor={{fill: 'rgba(0, 132, 61, 0.1)'}}
+                      contentStyle={{ 
+                        backgroundColor: '#1A1F2C', 
+                        border: '1px solid rgba(0, 132, 61, 0.3)',
+                        borderRadius: '4px'
+                      }}
+                      content={<ChartTooltipContent labelClassName="text-heineken-neon" />}
+                    />
+                    <Legend 
+                      wrapperStyle={{ 
+                        paddingTop: '10px',
+                        fontSize: '12px'
+                      }} 
+                    />
+                    <Bar 
+                      yAxisId="left"
+                      dataKey="pdvs" 
+                      name="PDVs"
+                      fill="#00843D" 
+                      radius={[4, 4, 0, 0]}
+                      className="opacity-90 hover:opacity-100"
+                    />
+                    <Bar 
+                      yAxisId="left"
+                      dataKey="conversoes" 
+                      name="Conversões"
+                      fill="#3EFF7F" 
+                      radius={[4, 4, 0, 0]}
+                      className="opacity-90 hover:opacity-100"
+                    />
+                    <Bar 
+                      yAxisId="right"
+                      dataKey="taxaSucesso" 
+                      name="Taxa de Sucesso (%)"
+                      fill="#FFD700" 
+                      radius={[4, 4, 0, 0]}
+                      className="opacity-90 hover:opacity-100"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center">
+                <div className="text-center text-tactical-silver">
+                  <BarChart3 className="h-16 w-16 text-heineken-neon/40 mx-auto mb-3" />
+                  <p>Nenhum dado disponível para os filtros selecionados</p>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
