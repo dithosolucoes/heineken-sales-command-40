@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
@@ -11,7 +10,8 @@ import {
   LayoutDashboard,
   ClipboardList,
   FileText,
-  Building
+  Building,
+  Trophy
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -45,12 +45,10 @@ const Header = ({ userType }: HeaderProps) => {
       default:
         return [
           { name: "Dashboard", href: "/vendedor/dashboard", icon: <LayoutDashboard className="h-4 w-4" /> },
-          { name: "Relatórios", href: "/vendedor/relatorio", icon: <FileText className="h-4 w-4" /> },
+          { name: "Ranking", href: "/vendedor/ranking", icon: <Trophy className="h-4 w-4" /> },
         ];
     }
   };
-  
-  const navItems = getNavItems();
   
   // Determina o título do header com base no tipo de usuário
   const getUserTitle = () => {
