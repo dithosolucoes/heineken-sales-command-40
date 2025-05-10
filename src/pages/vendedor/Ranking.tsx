@@ -22,29 +22,12 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Trophy, Target, CalendarIcon, Filter, Clock, Check, X, ListChecks, BarChart3 } from "lucide-react";
+import { Trophy, Check, X, Clock, ListChecks } from "lucide-react";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 // Tipo para vendedores da equipe
 interface Vendedor {
-  id: string;
-  nome: string;
-  alvosAtingidos: number;
-  totalAlvos: number;
-  progresso: number;
-}
-
-// Tipo para filiais
-interface Filial {
   id: string;
   nome: string;
   alvosAtingidos: number;
@@ -114,52 +97,6 @@ const vendedoresMockData: Vendedor[] = [
   }
 ];
 
-// Dados simulados para ranking de filiais
-const filiaisMockData: Filial[] = [
-  {
-    id: "F-2001",
-    nome: "SP - Capital",
-    alvosAtingidos: 245,
-    totalAlvos: 300,
-    progresso: 82
-  },
-  {
-    id: "F-2002",
-    nome: "SP - Campinas",
-    alvosAtingidos: 210,
-    totalAlvos: 300,
-    progresso: 70
-  },
-  {
-    id: "F-2003",
-    nome: "SP - Guarulhos",
-    alvosAtingidos: 265,
-    totalAlvos: 300,
-    progresso: 88
-  },
-  {
-    id: "F-2004",
-    nome: "SP - Santos",
-    alvosAtingidos: 195,
-    totalAlvos: 300,
-    progresso: 65
-  },
-  {
-    id: "F-2005",
-    nome: "SP - São José dos Campos",
-    alvosAtingidos: 240,
-    totalAlvos: 300,
-    progresso: 80
-  },
-  {
-    id: "F-2006",
-    nome: "SP - Ribeirão Preto",
-    alvosAtingidos: 225,
-    totalAlvos: 300,
-    progresso: 75
-  }
-];
-
 // Dados simulados para histórico de alvos
 const alvosHistoricoMockData: AlvoHistorico[] = [
   {
@@ -217,55 +154,56 @@ const alvosHistoricoMockData: AlvoHistorico[] = [
     clienteNome: "Pizzaria Forno a Lenha",
     data: new Date(2023, 4, 30),
     status: "pendente"
+  },
+  {
+    id: "A-3009",
+    clienteId: "PDV-2555",
+    clienteNome: "Choperia Paulista",
+    data: new Date(2023, 5, 2),
+    status: "concluido"
+  },
+  {
+    id: "A-3010",
+    clienteId: "PDV-2666",
+    clienteNome: "Bar do Zé",
+    data: new Date(2023, 5, 5),
+    status: "pendente"
+  },
+  {
+    id: "A-3011",
+    clienteId: "PDV-2777",
+    clienteNome: "Quiosque da Praia",
+    data: new Date(2023, 5, 8),
+    status: "concluido"
+  },
+  {
+    id: "A-3012",
+    clienteId: "PDV-2888",
+    clienteNome: "Restaurante Vista Mar",
+    data: new Date(2023, 5, 10),
+    status: "cancelado"
   }
 ];
 
 const VendedorRanking = () => {
-  const [dataInicio, setDataInicio] = useState<Date | undefined>(
-    new Date(new Date().setDate(new Date().getDate() - 30))
-  );
-  const [dataFim, setDataFim] = useState<Date | undefined>(new Date());
-  const [vendedoresFiltrados, setVendedoresFiltrados] = useState<Vendedor[]>([]);
-  const [filiaisFiltradas, setFiliaisFiltradas] = useState<Filial[]>([]);
-  const [alvosHistoricoFiltrados, setAlvosHistoricoFiltrados] = useState<AlvoHistorico[]>([]);
   const [tab, setTab] = useState<string>("equipe");
+  const [vendedoresFiltrados, setVendedoresFiltrados] = useState<Vendedor[]>([]);
+  const [alvosHistoricoFiltrados, setAlvosHistoricoFiltrados] = useState<AlvoHistorico[]>([]);
   
   useEffect(() => {
     document.title = "Ranking | Vendedor Heineken SP SUL";
     aplicarFiltros();
-  }, [dataInicio, dataFim, tab]);
+  }, [tab]);
   
-  // Função para filtrar dados por data
+  // Função para ordenar dados
   const aplicarFiltros = () => {
-    // Filtrar vendedores (sem filtro de data, apenas ordenação)
+    // Ordenar vendedores por progresso (do maior para o menor)
     const vendedoresOrdenados = [...vendedoresMockData].sort((a, b) => b.progresso - a.progresso);
     setVendedoresFiltrados(vendedoresOrdenados);
     
-    // Filtrar filiais (sem filtro de data, apenas ordenação)
-    const filiaisOrdenadas = [...filiaisMockData].sort((a, b) => b.progresso - a.progresso);
-    setFiliaisFiltradas(filiaisOrdenadas);
-    
-    // Filtrar histórico de alvos por data
-    let alvosResultado = [...alvosHistoricoMockData];
-    
-    if (dataInicio) {
-      alvosResultado = alvosResultado.filter(a => a.data >= dataInicio);
-    }
-    
-    if (dataFim) {
-      alvosResultado = alvosResultado.filter(a => a.data <= dataFim);
-    }
-    
-    // Ordenar por data, da mais recente para a mais antiga
-    alvosResultado.sort((a, b) => b.data.getTime() - a.data.getTime());
-    
-    setAlvosHistoricoFiltrados(alvosResultado);
-  };
-  
-  // Resetar filtros para o último mês
-  const resetarFiltros = () => {
-    setDataInicio(new Date(new Date().setDate(new Date().getDate() - 30)));
-    setDataFim(new Date());
+    // Ordenar histórico de alvos por data, da mais recente para a mais antiga
+    const alvosOrdenados = [...alvosHistoricoMockData].sort((a, b) => b.data.getTime() - a.data.getTime());
+    setAlvosHistoricoFiltrados(alvosOrdenados);
   };
   
   // Função para renderizar o ícone de status
@@ -322,91 +260,10 @@ const VendedorRanking = () => {
   return (
     <DashboardLayout userType="vendedor" pageTitle="Ranking">
       <div className="px-4 py-6 max-w-7xl mx-auto">
-        <Card className="bg-tactical-darkgray/80 border-heineken/30 mb-6">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Filtros</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <label className="text-sm text-tactical-silver mb-2 block">Data Início</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left bg-tactical-black border border-heineken/30 hover:bg-tactical-black/80 hover:text-heineken-neon",
-                      !dataInicio && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dataInicio ? (
-                      format(dataInicio, "PPP", { locale: ptBR })
-                    ) : (
-                      <span>Selecionar data</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-tactical-black border-heineken/30" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={dataInicio}
-                    onSelect={setDataInicio}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-            
-            <div className="flex-1">
-              <label className="text-sm text-tactical-silver mb-2 block">Data Fim</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left bg-tactical-black border border-heineken/30 hover:bg-tactical-black/80 hover:text-heineken-neon",
-                      !dataFim && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dataFim ? (
-                      format(dataFim, "PPP", { locale: ptBR })
-                    ) : (
-                      <span>Selecionar data</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-tactical-black border-heineken/30" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={dataFim}
-                    onSelect={setDataFim}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-            
-            <div className="flex-1 flex items-end">
-              <Button 
-                className="w-full bg-heineken hover:bg-heineken/80"
-                onClick={resetarFiltros}
-              >
-                <Filter className="mr-2 h-4 w-4" /> Resetar Filtros
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-        
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="w-full bg-tactical-black border-b border-heineken/30 mb-6 gap-2">
             <TabsTrigger value="equipe" className="flex items-center gap-2">
               <Trophy className="h-4 w-4" /> Ranking Equipe
-            </TabsTrigger>
-            <TabsTrigger value="filiais" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" /> Ranking Filiais
             </TabsTrigger>
             <TabsTrigger value="historico" className="flex items-center gap-2">
               <ListChecks className="h-4 w-4" /> Histórico de Alvos
@@ -472,62 +329,6 @@ const VendedorRanking = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="filiais">
-            <Card className="bg-tactical-darkgray/80 border-heineken/30">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-heineken" /> Ranking de Filiais
-                </CardTitle>
-                <CardDescription>
-                  Desempenho geral de todas as filiais Heineken
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border border-heineken/20 overflow-hidden">
-                  <Table>
-                    <TableHeader className="bg-tactical-black">
-                      <TableRow>
-                        <TableHead className="w-14">#</TableHead>
-                        <TableHead>Filial</TableHead>
-                        <TableHead>Progresso</TableHead>
-                        <TableHead className="text-right">Alvos</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filiaisFiltradas.map((filial, index) => (
-                        <TableRow key={filial.id}>
-                          <TableCell>
-                            <span className={cn(
-                              "flex items-center justify-center w-8 h-8 rounded-full", 
-                              index === 0 ? "bg-yellow-400/40 text-yellow-400" : 
-                              index === 1 ? "bg-gray-400/40 text-gray-400" : 
-                              index === 2 ? "bg-amber-600/40 text-amber-600" : "bg-tactical-black"
-                            )}>
-                              {index + 1}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            {filial.nome}
-                          </TableCell>
-                          <TableCell className="w-1/3">
-                            <div className="flex flex-col gap-1">
-                              <ProgressBar valor={filial.progresso} />
-                              <span className="text-xs text-tactical-silver">{filial.progresso}%</span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <span className="font-semibold">{filial.alvosAtingidos}</span>
-                            <span className="text-tactical-silver text-sm">/{filial.totalAlvos}</span>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           <TabsContent value="historico">
             <Card className="bg-tactical-darkgray/80 border-heineken/30">
               <CardHeader className="pb-2">
@@ -549,38 +350,29 @@ const VendedorRanking = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {alvosHistoricoFiltrados.length > 0 ? (
-                        alvosHistoricoFiltrados.map(alvo => (
-                          <TableRow key={alvo.id}>
-                            <TableCell>
-                              <div>
-                                <span className="font-medium">{alvo.clienteNome}</span>
-                                <span className="block text-xs text-tactical-silver">{alvo.clienteId}</span>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              {format(alvo.data, "dd/MM/yyyy")}
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center space-x-2">
-                                <span className={`p-1 rounded-full ${alvo.status === "concluido" ? "bg-green-500" : alvo.status === "cancelado" ? "bg-red-500" : "bg-gray-400"}`}>
-                                  {renderizarIconeStatus(alvo.status)}
-                                </span>
-                                <span className={`py-1 px-2 rounded-md text-xs ${getClasseStatus(alvo.status)}`}>
-                                  {getTextoStatus(alvo.status)}
-                                </span>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell colSpan={3} className="text-center py-8">
-                            <Filter className="h-10 w-10 text-tactical-silver/50 mx-auto mb-2" />
-                            <p className="text-tactical-silver">Nenhum alvo encontrado no período selecionado.</p>
+                      {alvosHistoricoFiltrados.map(alvo => (
+                        <TableRow key={alvo.id}>
+                          <TableCell>
+                            <div>
+                              <span className="font-medium">{alvo.clienteNome}</span>
+                              <span className="block text-xs text-tactical-silver">{alvo.clienteId}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {format(alvo.data, "dd/MM/yyyy")}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center space-x-2">
+                              <span className={`p-1 rounded-full ${alvo.status === "concluido" ? "bg-green-500" : alvo.status === "cancelado" ? "bg-red-500" : "bg-gray-400"}`}>
+                                {renderizarIconeStatus(alvo.status)}
+                              </span>
+                              <span className={`py-1 px-2 rounded-md text-xs ${getClasseStatus(alvo.status)}`}>
+                                {getTextoStatus(alvo.status)}
+                              </span>
+                            </div>
                           </TableCell>
                         </TableRow>
-                      )}
+                      ))}
                     </TableBody>
                   </Table>
                 </div>
