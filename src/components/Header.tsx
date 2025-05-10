@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, BarChart3, Target, Users, LogOut } from "lucide-react";
+import { Menu, X, ChevronDown, BarChart3, Target, Users, LogOut, Building, Database } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -31,7 +30,8 @@ const menuConfig = {
     { name: "Missões", path: "/supervisor/missoes", icon: <Target size={18} /> }
   ],
   admin: [
-    { name: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 size={18} /> }
+    { name: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 size={18} /> },
+    { name: "Filiais", path: "/admin/filiais", icon: <Building size={18} /> }
   ]
 };
 

@@ -18,8 +18,12 @@ import SupervisorDashboard from "./pages/supervisor/Dashboard";
 import SupervisorComparativo from "./pages/supervisor/Comparativo";
 import SupervisorMissoes from "./pages/supervisor/Missoes";
 
-// Página do Admin
+// Páginas do Admin
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminFiliais from "./pages/admin/Filiais";
+import AdminFilialDetalhe from "./pages/admin/FilialDetalhe";
+import AdminSupervisorDetalhe from "./pages/admin/SupervisorDetalhe";
+import AdminVendedorDetalhe from "./pages/admin/VendedorDetalhe";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +48,10 @@ const App = () => (
           
           {/* Rotas do Admin */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/filiais" element={<AdminFiliais />} />
+          <Route path="/admin/filial/:filialId" element={<AdminFilialDetalhe />} />
+          <Route path="/admin/supervisor/:supervisorId" element={<AdminSupervisorDetalhe />} />
+          <Route path="/admin/vendedor/:vendedorId" element={<AdminVendedorDetalhe />} />
           
           {/* Rotas legadas (redirecionamento) */}
           <Route path="/dashboard" element={<Navigate to="/vendedor/dashboard" replace />} />
