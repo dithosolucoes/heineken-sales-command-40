@@ -13,17 +13,6 @@ import NotFound from "./pages/NotFound";
 import VendedorDashboard from "./pages/vendedor/Dashboard";
 import VendedorRelatorio from "./pages/vendedor/Relatorio";
 
-// Páginas do Supervisor
-import SupervisorDashboard from "./pages/supervisor/Dashboard";
-import SupervisorRotas from "./pages/supervisor/Rotas";
-import SupervisorMissoes from "./pages/supervisor/Missoes";
-import SupervisorRelatorios from "./pages/supervisor/Relatorios";
-
-// Páginas do Admin
-import AdminDashboard from "./pages/admin/Dashboard";
-import AdminRelatorios from "./pages/admin/Relatorios";
-import AdminMissoes from "./pages/admin/Missoes";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -39,17 +28,6 @@ const App = () => (
           {/* Rotas do Vendedor */}
           <Route path="/vendedor/dashboard" element={<VendedorDashboard />} />
           <Route path="/vendedor/relatorio" element={<VendedorRelatorio />} />
-          
-          {/* Rotas do Supervisor */}
-          <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />
-          <Route path="/supervisor/rotas" element={<SupervisorRotas />} />
-          <Route path="/supervisor/missoes" element={<SupervisorMissoes />} />
-          <Route path="/supervisor/relatorios" element={<SupervisorRelatorios />} />
-          
-          {/* Rotas do Admin */}
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/relatorios" element={<AdminRelatorios />} />
-          <Route path="/admin/missoes" element={<AdminMissoes />} />
           
           {/* Rotas legadas (redirecionamento) */}
           <Route path="/dashboard" element={<Navigate to="/vendedor/dashboard" replace />} />
