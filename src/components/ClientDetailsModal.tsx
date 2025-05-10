@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { 
   Dialog, 
   DialogContent, 
@@ -97,10 +97,13 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
   onConfirmConversion
 }) => {
   const { toast } = useToast();
+  const [isTargetHit, setIsTargetHit] = useState(false);
 
   if (!client) return null;
 
   const handleConfirmConversion = () => {
+    setIsTargetHit(true);
+    
     if (onConfirmConversion && client) {
       onConfirmConversion(client.id);
       toast({
@@ -211,9 +214,13 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
           <div className="p-4 border-t border-heineken/20">
             <Button 
               onClick={handleConfirmConversion} 
-              className="w-full tactical-button py-6"
+              className={`w-full tactical-button py-6 transition-all duration-300 ${
+                isTargetHit 
+                  ? 'bg-heineken/80 hover:bg-heineken text-white' 
+                  : 'bg-tactical-darkgray border border-heineken text-heineken-neon hover:bg-heineken/20'
+              }`}
             >
-              ALVO ATINGIDO
+              {isTargetHit ? "ALVO ATINGIDO" : "ALVO"}
             </Button>
           </div>
         </div>

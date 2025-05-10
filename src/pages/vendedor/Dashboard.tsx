@@ -32,6 +32,10 @@ const Dashboard = () => {
     setIsModalOpen(true);
   };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   const handleConfirmConversion = (clientId: string) => {
     console.log(`Conversion confirmed for client ${clientId}`);
     // Here you would typically update the client data in a real app
@@ -116,7 +120,7 @@ const Dashboard = () => {
             onClick={() => setIsClientPanelMinimized(false)}
             className="tactical-button p-2 rounded-md"
           >
-            <span className="text-xs">Próximos atendimentos</span>
+            <span className="text-xs">Missões</span>
           </button>
         ) : (
           <div className="relative animate-tactical-fade">
@@ -139,7 +143,7 @@ const Dashboard = () => {
       {/* Single client details modal - only this instance should exist */}
       <ClientDetailsModal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        onClose={handleModalClose} 
         client={selectedClient}
         onConfirmConversion={handleConfirmConversion}
       />
