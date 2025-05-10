@@ -214,10 +214,10 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
           <div className="p-4 border-t border-heineken/20">
             <Button 
               onClick={handleConfirmConversion} 
-              className={`w-full tactical-button py-6 transition-all duration-300 ${
+              className={`w-full tactical-button py-6 ${
                 isTargetHit 
-                  ? 'bg-heineken/80 hover:bg-heineken text-white' 
-                  : 'bg-tactical-darkgray border border-heineken text-heineken-neon hover:bg-heineken/20'
+                  ? 'bg-heineken/80 text-white' 
+                  : 'bg-tactical-darkgray border border-heineken text-heineken-neon'
               }`}
             >
               {isTargetHit ? "ALVO ATINGIDO" : "ALVO"}
