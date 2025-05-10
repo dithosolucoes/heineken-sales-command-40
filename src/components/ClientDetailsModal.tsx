@@ -1,4 +1,3 @@
-
 import React from "react";
 import { 
   Dialog, 
@@ -209,12 +208,45 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
           
           {/* Footer/Action */}
           <div className="p-4 border-t border-heineken/20">
-            <Button 
-              onClick={handleConfirmConversion} 
-              className="w-full tactical-button py-6"
-            >
-              ALVO ATINGIDO
-            </Button>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-sm uppercase text-heineken-neon mb-3 font-bold tracking-wider">Alvo Atingido</p>
+              <button 
+                onClick={handleConfirmConversion}
+                className="w-32 h-32 rounded-full bg-heineken flex items-center justify-center transform hover:scale-105 transition-all duration-300 tactical-glow border-4 border-white relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-heineken rounded-full flex items-center justify-center">
+                  <div className="w-full h-full flex items-center justify-center">
+                    {/* Stylized bottle cap design */}
+                    <div className="w-28 h-28 rounded-full bg-heineken border-2 border-white flex items-center justify-center relative">
+                      {/* Ridges around the cap */}
+                      <div className="absolute inset-0 pointer-events-none">
+                        {[...Array(24)].map((_, i) => (
+                          <div 
+                            key={i}
+                            className="absolute w-2 h-2 bg-heineken-dark"
+                            style={{
+                              top: '50%',
+                              left: '50%',
+                              transform: `rotate(${i * 15}deg) translate(13px, 0px) rotate(-${i * 15}deg)`,
+                              borderRadius: '1px'
+                            }}
+                          ></div>
+                        ))}
+                      </div>
+                      
+                      {/* Inner circle with star */}
+                      <div className="w-20 h-20 rounded-full bg-heineken relative flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full border-2 border-white flex items-center justify-center">
+                          <div className="text-white">
+                            <Target size={26} className="group-hover:animate-pulse-green" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </DialogContent>
