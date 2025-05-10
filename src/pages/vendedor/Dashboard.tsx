@@ -42,121 +42,125 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout userType="vendedor" pageTitle="">
+    <div className="min-h-screen flex flex-col bg-tactical-black">
+      <Header userType="vendedor" />
+      
       {/* Map as main background element */}
-      <div className="absolute inset-0 -mt-12">
-        <Map 
-          highlightedClientId={hoveredClient?.id} 
-          onSelectClient={handleClientSelect}
-        />
-      </div>
-
-      {/* Centered search bar */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md">
-        <div className="relative">
-          <Input
-            placeholder="Buscar cliente por nome ou endereço..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-tactical-black/70 border-heineken/30 pl-9 pr-4 py-2 text-sm text-white w-full shadow-lg"
+      <div className="relative flex-1">
+        <div className="absolute inset-0">
+          <Map 
+            highlightedClientId={hoveredClient?.id} 
+            onSelectClient={handleClientSelect}
           />
-          <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-tactical-silver" />
         </div>
-      </div>
 
-      {/* Radar positioned in the bottom right */}
-      <div className="absolute bottom-8 right-8 z-10">
-        <Radar />
-      </div>
+        {/* Centered search bar */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md">
+          <div className="relative">
+            <Input
+              placeholder="Buscar cliente por nome ou endereço..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-tactical-black/70 border-heineken/30 pl-9 pr-4 py-2 text-sm text-white w-full shadow-lg"
+            />
+            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-tactical-silver" />
+          </div>
+        </div>
 
-      {/* Client Panel (floating in the upper right) */}
-      {selectedClient && (
-        <div className={`absolute ${isPanelMinimized ? 'top-4 right-4 w-auto h-auto' : 'top-14 right-4 w-full max-w-sm'} transition-all duration-300 ease-in-out z-20`}>
-          {isPanelMinimized ? (
+        {/* Radar positioned in the bottom right */}
+        <div className="absolute bottom-8 right-8 z-10">
+          <Radar />
+        </div>
+
+        {/* Client Panel (floating in the upper right) */}
+        {selectedClient && (
+          <div className={`absolute ${isPanelMinimized ? 'top-4 right-4 w-auto h-auto' : 'top-14 right-4 w-full max-w-sm'} transition-all duration-300 ease-in-out z-20`}>
+            {isPanelMinimized ? (
+              <button 
+                onClick={() => setIsPanelMinimized(false)}
+                className="tactical-button p-2 rounded-md flex items-center"
+              >
+                <span className="text-xs mr-2">Cliente: {selectedClient.name}</span>
+                <span className="text-tactical-silver">+</span>
+              </button>
+            ) : (
+              <div className="relative">
+                <button 
+                  onClick={() => setIsPanelMinimized(true)}
+                  className="absolute -top-8 right-0 bg-tactical-darkgray/80 border border-heineken/20 text-tactical-silver p-1 rounded-t-md"
+                >
+                  <X size={16} />
+                </button>
+                <div className="bg-tactical-black border border-heineken/30 rounded-md p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-heineken-neon font-bold">{selectedClient.name}</h3>
+                    <button 
+                      onClick={() => setSelectedClient(null)}
+                      className="text-tactical-silver hover:text-white"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                  <p className="text-tactical-silver text-sm mb-2">
+                    {selectedClient.address.street}, {selectedClient.address.neighborhood}
+                  </p>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="w-full tactical-button py-2 text-sm"
+                  >
+                    VER DETALHES
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Client Panel (floating in the bottom left) */}
+        <div className={`absolute ${isClientPanelMinimized ? 'bottom-4 left-4 w-auto h-auto' : 'bottom-4 left-4 w-full max-w-xs'} transition-all duration-300 ease-in-out z-10`}>
+          {isClientPanelMinimized ? (
             <button 
-              onClick={() => setIsPanelMinimized(false)}
-              className="tactical-button p-2 rounded-md flex items-center"
+              onClick={() => setIsClientPanelMinimized(false)}
+              className="tactical-button p-2 rounded-md"
             >
-              <span className="text-xs mr-2">Cliente: {selectedClient.name}</span>
-              <span className="text-tactical-silver">+</span>
+              <span className="text-xs">Missões</span>
             </button>
           ) : (
-            <div className="relative">
+            <div className="relative animate-tactical-fade">
               <button 
-                onClick={() => setIsPanelMinimized(true)}
+                onClick={() => setIsClientPanelMinimized(true)}
                 className="absolute -top-8 right-0 bg-tactical-darkgray/80 border border-heineken/20 text-tactical-silver p-1 rounded-t-md"
               >
                 <X size={16} />
               </button>
-              <div className="bg-tactical-black border border-heineken/30 rounded-md p-4">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-heineken-neon font-bold">{selectedClient.name}</h3>
-                  <button 
-                    onClick={() => setSelectedClient(null)}
-                    className="text-tactical-silver hover:text-white"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-                <p className="text-tactical-silver text-sm mb-2">
-                  {selectedClient.address.street}, {selectedClient.address.neighborhood}
-                </p>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="w-full tactical-button py-2 text-sm"
-                >
-                  VER DETALHES
-                </button>
-              </div>
+              <ClientPanel 
+                clients={clients} 
+                onSelectClient={handleClientSelect}
+                onHoverClient={setHoveredClient}
+                compact={isMobile} 
+              />
             </div>
           )}
         </div>
-      )}
 
-      {/* Client Panel (floating in the bottom left) */}
-      <div className={`absolute ${isClientPanelMinimized ? 'bottom-4 left-4 w-auto h-auto' : 'bottom-4 left-4 w-full max-w-xs'} transition-all duration-300 ease-in-out z-10`}>
-        {isClientPanelMinimized ? (
-          <button 
-            onClick={() => setIsClientPanelMinimized(false)}
-            className="tactical-button p-2 rounded-md"
-          >
-            <span className="text-xs">Missões</span>
-          </button>
-        ) : (
-          <div className="relative animate-tactical-fade">
-            <button 
-              onClick={() => setIsClientPanelMinimized(true)}
-              className="absolute -top-8 right-0 bg-tactical-darkgray/80 border border-heineken/20 text-tactical-silver p-1 rounded-t-md"
-            >
-              <X size={16} />
-            </button>
-            <ClientPanel 
-              clients={clients} 
-              onSelectClient={handleClientSelect}
-              onHoverClient={setHoveredClient}
-              compact={isMobile} 
-            />
-          </div>
+        {/* Single client details modal - only this instance should exist */}
+        <ClientDetailsModal 
+          isOpen={isModalOpen} 
+          onClose={handleModalClose} 
+          client={selectedClient}
+          onConfirmConversion={handleConfirmConversion}
+        />
+
+        {/* Mobile client list */}
+        {isMobile && (
+          <MobileClientsList 
+            clients={clients}
+            onSelectClient={handleClientSelect}
+            onOpenModal={() => setIsModalOpen(true)}
+          />
         )}
       </div>
-
-      {/* Single client details modal - only this instance should exist */}
-      <ClientDetailsModal 
-        isOpen={isModalOpen} 
-        onClose={handleModalClose} 
-        client={selectedClient}
-        onConfirmConversion={handleConfirmConversion}
-      />
-
-      {/* Mobile client list */}
-      {isMobile && (
-        <MobileClientsList 
-          clients={clients}
-          onSelectClient={handleClientSelect}
-          onOpenModal={() => setIsModalOpen(true)}
-        />
-      )}
-    </DashboardLayout>
+    </div>
   );
 };
 
