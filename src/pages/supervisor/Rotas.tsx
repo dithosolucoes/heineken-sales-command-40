@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, MapPin, User, Calendar, BarChart3, Eye } from "lucide-react";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
@@ -202,14 +201,9 @@ const SupervisorRotas = () => {
           {/* Mapa (desktop e tablets) */}
           <div className="hidden md:block lg:col-span-7 xl:col-span-8 rounded-lg overflow-hidden border border-heineken/30 h-[calc(100vh-250px)]">
             <Map 
-              center={selectedRota ? [selectedRota.coordenadas.lat, selectedRota.coordenadas.lng] : [-23.55, -46.65]} 
-              zoom={selectedRota ? selectedRota.coordenadas.zoom : 10} 
-              markers={selectedRota ? selectedRota.pontosDeVenda.map((pdv: any) => ({
-                id: pdv.id,
-                position: [pdv.latitude, pdv.longitude],
-                popup: pdv.nome,
-                status: pdv.visitado ? 'visited' : 'pending'
-              })) : []}
+              className=""
+              highlightedClientId={selectedRota?.id.toString()}
+              onSelectClient={(client) => console.log("Client selected:", client)}
             />
           </div>
         </div>
@@ -262,14 +256,9 @@ const SupervisorRotas = () => {
               {/* Mapa (mobile) */}
               <div className="h-[200px] rounded-md overflow-hidden border border-heineken/20">
                 <Map 
-                  center={[selectedRota.coordenadas.lat, selectedRota.coordenadas.lng]} 
-                  zoom={selectedRota.coordenadas.zoom} 
-                  markers={selectedRota.pontosDeVenda.map((pdv: any) => ({
-                    id: pdv.id,
-                    position: [pdv.latitude, pdv.longitude],
-                    popup: pdv.nome,
-                    status: pdv.visitado ? 'visited' : 'pending'
-                  }))}
+                  className=""
+                  highlightedClientId={selectedRota.id.toString()}
+                  onSelectClient={(client) => console.log("Client selected:", client)}
                 />
               </div>
               

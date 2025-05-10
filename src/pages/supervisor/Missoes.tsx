@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Plus, Filter, CheckCircle, AlertCircle, Calendar } from "lucide-react";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
@@ -9,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { ProgressBar } from "@/components/ProgressBar";
+import ProgressBar from "@/components/ProgressBar";
 
 // Dados de exemplo para missões
 const missoesData = [
@@ -203,9 +202,11 @@ const SupervisorMissoes = () => {
                     <span className="text-heineken-neon">{missao.progresso}%</span>
                   </div>
                   <ProgressBar 
-                    progress={missao.progresso} 
-                    className="h-1.5"
-                    progressClassName={missao.progresso >= 100 ? "bg-green-500" : "bg-heineken"}
+                    value={missao.progresso} 
+                    max={100}
+                    label={""}
+                    showValue={false}
+                    size={"md"}
                   />
                 </div>
               </CardContent>
@@ -261,9 +262,11 @@ const SupervisorMissoes = () => {
                     </span>
                   </div>
                   <ProgressBar 
-                    progress={selectedMissao.progresso} 
-                    className="h-2"
-                    progressClassName={selectedMissao.progresso >= 100 ? "bg-green-500" : "bg-heineken"}
+                    value={selectedMissao.progresso} 
+                    max={100}
+                    label={""}
+                    showValue={false}
+                    size={"md"}
                   />
                 </div>
                 
@@ -278,12 +281,11 @@ const SupervisorMissoes = () => {
                         </span>
                       </div>
                       <ProgressBar 
-                        progress={vendedor.progresso} 
-                        className="h-1.5"
-                        progressClassName={
-                          vendedor.progresso >= 80 ? "bg-green-500" : 
-                          vendedor.progresso >= 40 ? "bg-yellow-400" : "bg-red-500"
-                        }
+                        value={vendedor.progresso} 
+                        max={100}
+                        label={""}
+                        showValue={false}
+                        size={"md"}
                       />
                     </div>
                   ))}
