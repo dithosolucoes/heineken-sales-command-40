@@ -61,14 +61,31 @@ export const missoesData: MissionData[] = [
 ];
 
 // Function to filter missions based on search term and active tab
-export const filterMissions = (searchTerm: string, activeTab: string): MissionData[] => {
+export const filterMissions = (
+  searchTerm: string, 
+  activeTab: string,
+  filters: { inProgress: boolean; planned: boolean; completed: boolean } = { 
+    inProgress: true, 
+    planned: true, 
+    completed: true 
+  }
+): MissionData[] => {
   return missoesData
     .filter(missao => missao.titulo.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter(missao => {
-      if (activeTab === "todas") return true;
-      if (activeTab === "em_andamento") return missao.status === "em_andamento";
-      if (activeTab === "planejadas") return missao.status === "planejada";
-      if (activeTab === "concluidas") return missao.status === "concluida";
+      if (activeTab === "todas") {
+        // Aplicar apenas os filtros quando estiver na aba "todas"
+        if (missao.status === "em_andamento" && !filters.inProgress) return false;
+        if (missao.status === "planejada" && !filters.planned) return false;
+        if (missao.status === "concluida" && !filters.completed) return false;
+        return true;
+      }
+      
+      // Nas outras abas, respeitar a seleção da aba
+      if (activeTab === "em_andamento") return missao.status === "em_andamento" && filters.inProgress;
+      if (activeTab === "planejadas") return missao.status === "planejada" && filters.planned;
+      if (activeTab === "concluidas") return missao.status === "concluida" && filters.completed;
+      
       return true;
     });
 };

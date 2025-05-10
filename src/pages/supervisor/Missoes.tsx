@@ -14,9 +14,14 @@ const SupervisorMissoes = () => {
   const [activeTab, setActiveTab] = useState("todas");
   const [selectedMissao, setSelectedMissao] = useState<MissionData | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    inProgress: true,
+    planned: true,
+    completed: true
+  });
 
   // Get filtered missions
-  const missionsFiltradas = filterMissions(searchTerm, activeTab);
+  const missionsFiltradas = filterMissions(searchTerm, activeTab, filters);
 
   const handleMissaoClick = (missao: MissionData) => {
     setSelectedMissao(missao);
@@ -27,13 +32,21 @@ const SupervisorMissoes = () => {
     setIsDetailOpen(false);
   };
 
+  const handleFilterChange = (newFilters: { inProgress: boolean; planned: boolean; completed: boolean }) => {
+    setFilters(newFilters);
+    // Se algum filtro mudar, podemos resetar a tab para "todas" para evitar conflitos
+    setActiveTab("todas");
+  };
+
   return (
     <DashboardLayout userType="supervisor" pageTitle="Gerenciamento de Missões">
       <div className="px-4 pb-6">
         {/* Search and filter bar */}
         <MissionSearchBar 
           searchTerm={searchTerm} 
-          onSearchChange={setSearchTerm} 
+          onSearchChange={setSearchTerm}
+          filterOptions={filters}
+          onFilterChange={handleFilterChange}
         />
 
         {/* Status tabs */}
