@@ -13,6 +13,10 @@ import NotFound from "./pages/NotFound";
 import VendedorDashboard from "./pages/vendedor/Dashboard";
 import VendedorRanking from "./pages/vendedor/Ranking";
 
+// Páginas do Supervisor
+import SupervisorDashboard from "./pages/supervisor/Dashboard";
+import SupervisorComparativo from "./pages/supervisor/Comparativo";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -28,6 +32,10 @@ const App = () => (
           {/* Rotas do Vendedor */}
           <Route path="/vendedor/dashboard" element={<VendedorDashboard />} />
           <Route path="/vendedor/ranking" element={<VendedorRanking />} />
+          
+          {/* Rotas do Supervisor */}
+          <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />
+          <Route path="/supervisor/comparativo" element={<SupervisorComparativo />} />
           
           {/* Rotas legadas (redirecionamento) */}
           <Route path="/dashboard" element={<Navigate to="/vendedor/dashboard" replace />} />
