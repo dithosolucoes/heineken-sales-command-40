@@ -25,6 +25,7 @@ import {
 import { Trophy, Check, X, Clock, ListChecks } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Tipo para vendedores da equipe
 interface Vendedor {
@@ -189,6 +190,7 @@ const VendedorRanking = () => {
   const [tab, setTab] = useState<string>("equipe");
   const [vendedoresFiltrados, setVendedoresFiltrados] = useState<Vendedor[]>([]);
   const [alvosHistoricoFiltrados, setAlvosHistoricoFiltrados] = useState<AlvoHistorico[]>([]);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     document.title = "Ranking | Vendedor Heineken SP SUL";
@@ -259,44 +261,44 @@ const VendedorRanking = () => {
 
   return (
     <DashboardLayout userType="vendedor" pageTitle="Ranking">
-      <div className="px-4 py-6 max-w-7xl mx-auto">
+      <div className="px-2 sm:px-4 py-4 sm:py-6 max-w-7xl mx-auto">
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="w-full bg-tactical-black border-b border-heineken/30 mb-6 gap-2">
-            <TabsTrigger value="equipe" className="flex items-center gap-2">
-              <Trophy className="h-4 w-4" /> Ranking Equipe
+            <TabsTrigger value="equipe" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+              <Trophy className="h-3 w-3 sm:h-4 sm:w-4" /> Ranking Equipe
             </TabsTrigger>
-            <TabsTrigger value="historico" className="flex items-center gap-2">
-              <ListChecks className="h-4 w-4" /> Histórico de Alvos
+            <TabsTrigger value="historico" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+              <ListChecks className="h-3 w-3 sm:h-4 sm:w-4" /> Histórico de Alvos
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="equipe">
             <Card className="bg-tactical-darkgray/80 border-heineken/30">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-heineken" /> Ranking da Equipe
+              <CardHeader className={cn("pb-2", isMobile ? "px-2 py-3" : "")}>
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-heineken" /> Ranking da Equipe
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Seu progresso em comparação aos outros vendedores do seu supervisor
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className={cn(isMobile ? "px-1 py-2" : "")}>
                 <div className="rounded-md border border-heineken/20 overflow-hidden">
                   <Table>
                     <TableHeader className="bg-tactical-black">
                       <TableRow>
-                        <TableHead className="w-14">#</TableHead>
-                        <TableHead>Vendedor</TableHead>
-                        <TableHead>Progresso</TableHead>
-                        <TableHead className="text-right">Alvos</TableHead>
+                        <TableHead className={cn("w-10 sm:w-14", isMobile ? "px-2" : "")}>#</TableHead>
+                        <TableHead className={isMobile ? "px-2" : ""}>Vendedor</TableHead>
+                        <TableHead className={isMobile ? "px-2" : ""}>Progresso</TableHead>
+                        <TableHead className={cn("text-right", isMobile ? "px-2" : "")}>Alvos</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {vendedoresFiltrados.map((vendedor, index) => (
                         <TableRow key={vendedor.id} className={vendedor.id === "V-1001" ? "bg-heineken/10" : ""}>
-                          <TableCell>
+                          <TableCell className={isMobile ? "px-2 py-2" : ""}>
                             <span className={cn(
-                              "flex items-center justify-center w-8 h-8 rounded-full", 
+                              "flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full text-xs sm:text-sm", 
                               index === 0 ? "bg-yellow-400/40 text-yellow-400" : 
                               index === 1 ? "bg-gray-400/40 text-gray-400" : 
                               index === 2 ? "bg-amber-600/40 text-amber-600" : "bg-tactical-black"
@@ -304,21 +306,24 @@ const VendedorRanking = () => {
                               {index + 1}
                             </span>
                           </TableCell>
-                          <TableCell>
-                            <div className={vendedor.id === "V-1001" ? "font-bold text-heineken" : ""}>
+                          <TableCell className={cn(isMobile ? "px-2 py-2" : "")}>
+                            <div className={cn("whitespace-nowrap overflow-hidden text-ellipsis max-w-20 sm:max-w-none", 
+                              vendedor.id === "V-1001" ? "font-bold text-heineken" : "")}>
                               {vendedor.nome}
-                              {vendedor.id === "V-1001" && <span className="text-xs ml-2 text-tactical-silver">(Você)</span>}
+                              {vendedor.id === "V-1001" && (
+                                <span className="text-[10px] sm:text-xs ml-1 sm:ml-2 text-tactical-silver">(Você)</span>
+                              )}
                             </div>
                           </TableCell>
-                          <TableCell className="w-1/3">
+                          <TableCell className={cn("w-1/3", isMobile ? "px-2 py-2" : "")}>
                             <div className="flex flex-col gap-1">
                               <ProgressBar valor={vendedor.progresso} />
-                              <span className="text-xs text-tactical-silver">{vendedor.progresso}%</span>
+                              <span className="text-[10px] sm:text-xs text-tactical-silver">{vendedor.progresso}%</span>
                             </div>
                           </TableCell>
-                          <TableCell className="text-right">
-                            <span className="font-semibold">{vendedor.alvosAtingidos}</span>
-                            <span className="text-tactical-silver text-sm">/{vendedor.totalAlvos}</span>
+                          <TableCell className={cn("text-right", isMobile ? "px-2 py-2" : "")}>
+                            <span className="font-semibold text-xs sm:text-sm">{vendedor.alvosAtingidos}</span>
+                            <span className="text-tactical-silver text-[10px] sm:text-sm">/{vendedor.totalAlvos}</span>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -331,42 +336,47 @@ const VendedorRanking = () => {
 
           <TabsContent value="historico">
             <Card className="bg-tactical-darkgray/80 border-heineken/30">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <ListChecks className="h-5 w-5 text-heineken" /> Histórico de Alvos
+              <CardHeader className={cn("pb-2", isMobile ? "px-2 py-3" : "")}>
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  <ListChecks className="h-4 w-4 sm:h-5 sm:w-5 text-heineken" /> Histórico de Alvos
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs sm:text-sm">
                   Seu histórico de alvos e missões
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className={cn(isMobile ? "px-1 py-2" : "")}>
                 <div className="rounded-md border border-heineken/20 overflow-hidden">
                   <Table>
                     <TableHeader className="bg-tactical-black">
                       <TableRow>
-                        <TableHead>PDV</TableHead>
-                        <TableHead>Data</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead className={isMobile ? "px-2" : ""}>PDV</TableHead>
+                        <TableHead className={isMobile ? "px-2 w-24" : ""}>Data</TableHead>
+                        <TableHead className={isMobile ? "px-2" : ""}>Status</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {alvosHistoricoFiltrados.map(alvo => (
                         <TableRow key={alvo.id}>
-                          <TableCell>
+                          <TableCell className={isMobile ? "px-2 py-2" : ""}>
                             <div>
-                              <span className="font-medium">{alvo.clienteNome}</span>
-                              <span className="block text-xs text-tactical-silver">{alvo.clienteId}</span>
+                              <span className={cn("font-medium text-xs sm:text-sm line-clamp-1", 
+                                isMobile ? "max-w-28" : "")}>
+                                {alvo.clienteNome}
+                              </span>
+                              <span className="block text-[10px] sm:text-xs text-tactical-silver">{alvo.clienteId}</span>
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className={cn("whitespace-nowrap", isMobile ? "px-2 py-2 text-xs" : "")}>
                             {format(alvo.data, "dd/MM/yyyy")}
                           </TableCell>
-                          <TableCell>
-                            <div className="flex items-center space-x-2">
-                              <span className={`p-1 rounded-full ${alvo.status === "concluido" ? "bg-green-500" : alvo.status === "cancelado" ? "bg-red-500" : "bg-gray-400"}`}>
-                                {renderizarIconeStatus(alvo.status)}
-                              </span>
-                              <span className={`py-1 px-2 rounded-md text-xs ${getClasseStatus(alvo.status)}`}>
+                          <TableCell className={isMobile ? "px-2 py-2" : ""}>
+                            <div className="flex items-center space-x-1 sm:space-x-2">
+                              {!isMobile && (
+                                <span className={`p-1 rounded-full ${alvo.status === "concluido" ? "bg-green-500" : alvo.status === "cancelado" ? "bg-red-500" : "bg-gray-400"}`}>
+                                  {renderizarIconeStatus(alvo.status)}
+                                </span>
+                              )}
+                              <span className={`py-1 px-2 rounded-md text-[10px] sm:text-xs ${getClasseStatus(alvo.status)}`}>
                                 {getTextoStatus(alvo.status)}
                               </span>
                             </div>
