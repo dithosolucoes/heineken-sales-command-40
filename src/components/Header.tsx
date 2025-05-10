@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { 
@@ -49,6 +50,9 @@ const Header = ({ userType }: HeaderProps) => {
         ];
     }
   };
+  
+  // Initialize navItems using getNavItems function
+  const navItems = getNavItems();
   
   // Determina o título do header com base no tipo de usuário
   const getUserTitle = () => {
