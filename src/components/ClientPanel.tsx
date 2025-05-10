@@ -92,7 +92,7 @@ const ClientPanel: React.FC<ClientPanelProps> = ({
       <div className="flex items-center justify-between border-b border-heineken/20 pb-2 mb-3">
         <h2 className={`${compact ? 'text-xs' : 'text-sm'} font-bold text-heineken-neon flex items-center`}>
           <Store size={compact ? 14 : 16} className="mr-2" />
-          PRÓXIMOS ATENDIMENTOS
+          MISSÕES
         </h2>
         <Select 
           value={dateFilter} 
@@ -135,9 +135,7 @@ const ClientPanel: React.FC<ClientPanelProps> = ({
                 <h3 className={`${compact ? 'text-xs' : 'text-sm'} font-bold text-tactical-silver`}>
                   {client.name}
                 </h3>
-                <span className={`text-xs px-1.5 py-0.5 rounded-sm border border-current ${client.converted ? 'text-green-500' : 'text-yellow-500'}`}>
-                  {client.converted ? 'CONVERTIDO' : 'NÃO CONVERTIDO'}
-                </span>
+                {/* Removed the CONVERTIDO/NÃO CONVERTIDO status tag */}
               </div>
               
               <div className="flex items-center text-xs text-tactical-silver/80 mb-2">

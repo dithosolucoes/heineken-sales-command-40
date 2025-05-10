@@ -1,3 +1,4 @@
+
 import React from "react";
 import { 
   Dialog, 
@@ -14,7 +15,8 @@ import {
   Building2,
   MapPinned,
   Mail,
-  Check
+  Check,
+  Target
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -211,7 +213,7 @@ const ClientDetailsModal: React.FC<ClientDetailsModalProps> = ({
               onClick={handleConfirmConversion} 
               className="w-full tactical-button py-6"
             >
-              CONFIRMAR CONVERSÃO
+              ALVO ATINGIDO
             </Button>
           </div>
         </div>
