@@ -1,192 +1,167 @@
 
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Trophy, Bell, LogOut, User, Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { 
+  Menu, 
+  Users, 
+  BarChart3, 
+  LogOut, 
+  Map, 
+  UserRound, 
+  LayoutDashboard,
+  ClipboardList,
+  FileText,
+  Building
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
-  userType: "vendedor";
+  userType: "vendedor" | "supervisor" | "admin";
 }
 
 const Header = ({ userType }: HeaderProps) => {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const location = useLocation();
-
-  // Generate navigation links based on user type
-  const getNavigationLinks = () => {
+  
+  // Definição das rotas baseadas no tipo de usuário
+  const getNavItems = () => {
     switch (userType) {
-      case "vendedor":
+      case "supervisor":
         return [
-          { name: "Dashboard", path: "/vendedor/dashboard" },
-          { name: "Ranking", path: "/vendedor/ranking" },
+          { name: "Dashboard", href: "/supervisor/dashboard", icon: <LayoutDashboard className="h-4 w-4" /> },
+          { name: "Rotas", href: "/supervisor/rotas", icon: <Map className="h-4 w-4" /> },
+          { name: "Missões", href: "/supervisor/missoes", icon: <ClipboardList className="h-4 w-4" /> },
+          { name: "Relatórios", href: "/supervisor/relatorios", icon: <FileText className="h-4 w-4" /> },
         ];
+      case "admin":
+        return [
+          { name: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard className="h-4 w-4" /> },
+          { name: "Relatórios", href: "/admin/relatorios", icon: <FileText className="h-4 w-4" /> },
+          { name: "Missões", href: "/admin/missoes", icon: <ClipboardList className="h-4 w-4" /> },
+        ];
+      case "vendedor":
       default:
-        return [];
+        return [
+          { name: "Dashboard", href: "/vendedor/dashboard", icon: <LayoutDashboard className="h-4 w-4" /> },
+          { name: "Relatórios", href: "/vendedor/relatorio", icon: <FileText className="h-4 w-4" /> },
+        ];
+    }
+  };
+  
+  const navItems = getNavItems();
+  
+  // Determina o título do header com base no tipo de usuário
+  const getUserTitle = () => {
+    switch (userType) {
+      case "supervisor": 
+        return "SUPERVISOR";
+      case "admin":
+        return "ADMINISTRADOR";
+      case "vendedor":
+      default:
+        return "VENDEDOR";
+    }
+  };
+  
+  // Obtém o ícone do tipo de usuário
+  const getUserIcon = () => {
+    switch (userType) {
+      case "supervisor":
+        return <Users className="h-5 w-5 text-heineken mr-2" />;
+      case "admin":
+        return <Building className="h-5 w-5 text-heineken mr-2" />;
+      case "vendedor":
+      default:
+        return <UserRound className="h-5 w-5 text-heineken mr-2" />;
     }
   };
 
-  const navigationLinks = getNavigationLinks();
-
-  // Check if a path is active
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
-
   return (
-    <header className="bg-tactical-black border-b border-tactical-darkgray/90 py-2 relative z-10">
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        {/* Logo and Mobile Menu */}
-        <div className="flex items-center space-x-4">
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="sm" className="text-white p-1">
-                <Menu size={20} />
+    <header className="w-full py-2 px-4 bg-tactical-black border-b border-heineken/30 sticky top-0 z-50">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="mr-2 text-heineken hover:bg-tactical-darkgray hover:text-heineken-neon md:hidden">
+                <Menu />
+                <span className="sr-only">Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent
-              side="left"
-              className="w-64 bg-tactical-black border-r border-tactical-darkgray p-0"
-            >
+            <SheetContent side="left" className="bg-tactical-black border-heineken/30 w-[250px] sm:max-w-none">
               <div className="flex flex-col h-full">
-                <div className="p-4 border-b border-tactical-darkgray flex items-center justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src="/placeholder.svg"
-                      alt="Logo"
-                      className="h-8 mr-2"
-                    />
-                    <span className="text-lg font-bold text-heineken">
-                      Tactical
-                    </span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsSheetOpen(false)}
-                    className="text-tactical-silver"
-                  >
-                    <X size={18} />
-                  </Button>
+                <div className="mb-4 flex items-center">
+                  <img src="/placeholder.svg" alt="Logo" className="h-8 w-8 mr-2" />
+                  <h2 className="text-lg font-bold text-heineken-neon">Heineken SP SUL</h2>
                 </div>
-                <div className="p-4 flex-1">
-                  <nav className="space-y-1">
-                    {navigationLinks.map((link) => (
-                      <Link
-                        key={link.path}
-                        to={link.path}
-                        onClick={() => setIsSheetOpen(false)}
-                        className={`block px-4 py-2 rounded-md text-sm transition-colors ${
-                          isActive(link.path)
-                            ? "bg-heineken text-white"
-                            : "text-tactical-silver hover:bg-tactical-darkgray hover:text-white"
-                        }`}
-                      >
-                        {link.name}
-                      </Link>
-                    ))}
-                  </nav>
-                </div>
-                <div className="p-4 border-t border-tactical-darkgray">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="w-full justify-start text-tactical-silver"
+                <nav className="space-y-2 mb-4">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors",
+                        location.pathname === item.href
+                          ? "bg-heineken text-white"
+                          : "text-tactical-silver hover:bg-heineken/20 hover:text-heineken-neon"
+                      )}
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.icon}
+                      {item.name}
+                    </Link>
+                  ))}
+                </nav>
+                <div className="mt-auto">
+                  <Link
+                    to="/"
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-tactical-silver hover:bg-heineken/20 hover:text-heineken-neon transition-colors"
                   >
-                    <LogOut className="h-4 w-4 mr-2" />
+                    <LogOut className="h-4 w-4" />
                     Sair
-                  </Button>
+                  </Link>
                 </div>
               </div>
             </SheetContent>
           </Sheet>
-
-          {/* Desktop Logo */}
-          <div className="flex items-center">
-            <img src="/placeholder.svg" alt="Logo" className="h-8 mr-2" />
-            <span className="text-lg font-bold text-heineken hidden sm:inline">
-              Tactical
-            </span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-1">
-            {navigationLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-4 py-1.5 rounded-md text-sm transition-colors ${
-                  isActive(link.path)
-                    ? "bg-heineken text-white"
-                    : "text-tactical-silver hover:bg-tactical-darkgray hover:text-white"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+          
+          <Link to="/" className="flex items-center">
+            <img src="/placeholder.svg" alt="Logo" className="h-8 w-8 mr-2" />
+            <h1 className="text-lg font-bold text-heineken-neon hidden sm:inline-block">Heineken SP SUL</h1>
+          </Link>
         </div>
 
-        {/* User Actions */}
-        <div className="flex items-center space-x-3">
-          {/* Notifications */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-tactical-silver relative"
-          >
-            <Bell size={18} />
-            <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-heineken" />
-          </Button>
-
-          {/* User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <Avatar className="h-8 w-8 border border-tactical-darkgray">
-                  <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback className="bg-tactical-darkgray text-white">
-                    JV
-                  </AvatarFallback>
-                </Avatar>
-                <div className="hidden md:block text-left">
-                  <p className="text-sm font-medium">João Vendedor</p>
-                  <p className="text-xs text-tactical-silver">
-                    Vendedor - SP Sul
-                  </p>
-                </div>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="bg-tactical-darkgray border-heineken/20 min-w-[200px]"
+        <nav className="hidden md:flex items-center gap-1">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={cn(
+                "px-3 py-1.5 text-sm rounded-md transition-colors flex items-center",
+                location.pathname === item.href
+                  ? "bg-heineken text-white"
+                  : "text-tactical-silver hover:bg-heineken/20 hover:text-heineken-neon"
+              )}
             >
-              <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-tactical-silver/20" />
-              <DropdownMenuItem className="flex items-center">
-                <User className="mr-2 h-4 w-4" />
-                <span>Perfil</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center">
-                <Trophy className="mr-2 h-4 w-4" />
-                <span>Meus Alvos</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-tactical-silver/20" />
-              <DropdownMenuItem className="flex items-center">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Sair</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              {item.icon}
+              <span className="ml-1">{item.name}</span>
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <div className="flex items-center text-tactical-silver">
+            <div className="bg-tactical-darkgray/80 border border-heineken/30 rounded-md py-1 px-2 flex items-center">
+              {getUserIcon()}
+              <span className="text-xs font-bold hidden sm:inline">{getUserTitle()}</span>
+            </div>
+          </div>
+          
+          <Link to="/" className="text-tactical-silver hover:text-heineken-neon">
+            <LogOut className="h-5 w-5" />
+            <span className="sr-only">Sair</span>
+          </Link>
         </div>
       </div>
     </header>

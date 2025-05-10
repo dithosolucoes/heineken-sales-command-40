@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Calendar, Target, MapPin } from "lucide-react";
+import { Calendar, Store, MapPin } from "lucide-react";
 import { ClientData } from "@/types/client";
 import { getPotentialColor } from "@/utils/clientData";
 import { 
@@ -91,8 +91,8 @@ const ClientPanel: React.FC<ClientPanelProps> = ({
     <div className={`tactical-panel h-full flex flex-col ${compact ? 'p-2' : 'p-4'} bg-tactical-darkgray/90 backdrop-blur-md`}>
       <div className="flex items-center justify-between border-b border-heineken/20 pb-2 mb-3">
         <h2 className={`${compact ? 'text-xs' : 'text-sm'} font-bold text-heineken-neon flex items-center`}>
-          <Target size={compact ? 14 : 16} className="mr-2" />
-          PRÓXIMAS MISSÕES
+          <Store size={compact ? 14 : 16} className="mr-2" />
+          PRÓXIMOS ATENDIMENTOS
         </h2>
         <Select 
           value={dateFilter} 
@@ -111,8 +111,8 @@ const ClientPanel: React.FC<ClientPanelProps> = ({
 
       {filteredClients.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center text-tactical-silver text-sm">
-          <Target size={24} className="mb-2" />
-          <p>Nenhuma missão para este período</p>
+          <Store size={24} className="mb-2" />
+          <p>Nenhum cliente para atendimento neste período</p>
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto pr-1 space-y-3 max-h-[calc(100%-2rem)]">
@@ -136,7 +136,7 @@ const ClientPanel: React.FC<ClientPanelProps> = ({
                   {client.name}
                 </h3>
                 <span className={`text-xs px-1.5 py-0.5 rounded-sm border border-current ${client.converted ? 'text-green-500' : 'text-yellow-500'}`}>
-                  {client.converted ? 'ALVO ATINGIDO' : 'PENDENTE'}
+                  {client.converted ? 'CONVERTIDO' : 'NÃO CONVERTIDO'}
                 </span>
               </div>
               

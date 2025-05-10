@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound";
 
 // Páginas do Vendedor
 import VendedorDashboard from "./pages/vendedor/Dashboard";
-import VendedorRanking from "./pages/vendedor/Ranking";
+import VendedorRelatorio from "./pages/vendedor/Relatorio";
 
 const queryClient = new QueryClient();
 
@@ -27,11 +27,10 @@ const App = () => (
           
           {/* Rotas do Vendedor */}
           <Route path="/vendedor/dashboard" element={<VendedorDashboard />} />
-          <Route path="/vendedor/ranking" element={<VendedorRanking />} />
+          <Route path="/vendedor/relatorio" element={<VendedorRelatorio />} />
           
           {/* Rotas legadas (redirecionamento) */}
           <Route path="/dashboard" element={<Navigate to="/vendedor/dashboard" replace />} />
-          <Route path="/vendedor/relatorio" element={<Navigate to="/vendedor/ranking" replace />} />
           
           {/* Rota 404 */}
           <Route path="*" element={<NotFound />} />
