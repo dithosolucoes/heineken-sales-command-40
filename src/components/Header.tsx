@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, BarChart3, Target, Map, Users, LogOut } from "lucide-react";
+import { Menu, X, ChevronDown, BarChart3, Target, Users, LogOut } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -28,8 +28,7 @@ const menuConfig = {
   supervisor: [
     { name: "Dashboard", path: "/supervisor/dashboard", icon: <BarChart3 size={18} /> },
     { name: "Comparativo", path: "/supervisor/comparativo", icon: <BarChart3 size={18} /> },
-    { name: "Missões", path: "/supervisor/missoes", icon: <Target size={18} /> },
-    { name: "Rotas", path: "/supervisor/rotas", icon: <Map size={18} /> }
+    { name: "Missões", path: "/supervisor/missoes", icon: <Target size={18} /> }
   ],
   admin: [
     { name: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 size={18} /> }

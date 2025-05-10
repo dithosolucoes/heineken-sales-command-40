@@ -100,14 +100,9 @@ const MissionDetails = ({ mission, onClose }: MissionDetailsProps) => {
           </div>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex justify-center">
           <Button 
-            className="flex-1 bg-heineken hover:bg-heineken/80 text-black" 
-          >
-            Editar Missão
-          </Button>
-          <Button 
-            className="flex-1" 
+            className="min-w-32" 
             variant="outline" 
             onClick={onClose}
           >

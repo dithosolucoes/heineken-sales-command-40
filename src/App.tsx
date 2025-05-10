@@ -17,7 +17,6 @@ import VendedorRanking from "./pages/vendedor/Ranking";
 import SupervisorDashboard from "./pages/supervisor/Dashboard";
 import SupervisorComparativo from "./pages/supervisor/Comparativo";
 import SupervisorMissoes from "./pages/supervisor/Missoes";
-import SupervisorRotas from "./pages/supervisor/Rotas";
 
 // Página do Admin
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -42,7 +41,6 @@ const App = () => (
           <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />
           <Route path="/supervisor/comparativo" element={<SupervisorComparativo />} />
           <Route path="/supervisor/missoes" element={<SupervisorMissoes />} />
-          <Route path="/supervisor/rotas" element={<SupervisorRotas />} />
           
           {/* Rotas do Admin */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
