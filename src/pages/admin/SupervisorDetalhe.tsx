@@ -49,7 +49,7 @@ const vendedoresData = {
 };
 
 // Dados de exemplo para o gráfico de desempenho
-const getDesempenhoData = (supervisorId: string) => [
+const getDesempenhoData = (supervisorId: number) => [
   { nome: "Jan", vendas: 22000, conversoes: 72 },
   { nome: "Fev", vendas: 24500, conversoes: 74 },
   { nome: "Mar", vendas: 23800, conversoes: 71 },
@@ -66,17 +66,21 @@ const AdminSupervisorDetalhe = () => {
   const [desempenhoData, setDesempenhoData] = useState<any[]>([]);
   
   useEffect(() => {
-    if (supervisorId && supervisoresData[supervisorId as keyof typeof supervisoresData]) {
-      setSupervisor(supervisoresData[supervisorId as keyof typeof supervisoresData]);
-      setDesempenhoData(getDesempenhoData(supervisorId));
+    if (supervisorId) {
+      const supervisorIdNumber = parseInt(supervisorId, 10);
       
-      if (vendedoresData[supervisorId as keyof typeof vendedoresData]) {
-        setVendedores(vendedoresData[supervisorId as keyof typeof vendedoresData]);
+      if (supervisoresData[supervisorIdNumber as keyof typeof supervisoresData]) {
+        setSupervisor(supervisoresData[supervisorIdNumber as keyof typeof supervisoresData]);
+        setDesempenhoData(getDesempenhoData(supervisorIdNumber));
+        
+        if (vendedoresData[supervisorIdNumber as keyof typeof vendedoresData]) {
+          setVendedores(vendedoresData[supervisorIdNumber as keyof typeof vendedoresData]);
+        }
+        
+        document.title = `Supervisor: ${supervisoresData[supervisorIdNumber as keyof typeof supervisoresData].nome} | Admin | Heineken SP SUL`;
+      } else {
+        navigate("/admin/filiais");
       }
-      
-      document.title = `Supervisor: ${supervisoresData[supervisorId as keyof typeof supervisoresData].nome} | Admin | Heineken SP SUL`;
-    } else {
-      navigate("/admin/filiais");
     }
   }, [supervisorId, navigate]);
   

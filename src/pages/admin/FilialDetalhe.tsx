@@ -48,7 +48,7 @@ const filiaisData = {
 };
 
 // Dados de exemplo para o gráfico
-const getDesempenhoData = (filialId: string) => [
+const getDesempenhoData = (filialId: number) => [
   { nome: "Jan", vendas: 95000, conversoes: 68 },
   { nome: "Fev", vendas: 110000, conversoes: 70 },
   { nome: "Mar", vendas: 105000, conversoes: 65 },
@@ -65,17 +65,21 @@ const AdminFilialDetalhe = () => {
   const [desempenhoData, setDesempenhoData] = useState<any[]>([]);
   
   useEffect(() => {
-    if (filialId && filiaisData[filialId as keyof typeof filiaisData]) {
-      setFilial(filiaisData[filialId as keyof typeof filiaisData]);
-      setDesempenhoData(getDesempenhoData(filialId));
+    if (filialId) {
+      const filialIdNumber = parseInt(filialId, 10);
       
-      if (supervisoresData[filialId as keyof typeof supervisoresData]) {
-        setSupervisores(supervisoresData[filialId as keyof typeof supervisoresData]);
+      if (filiaisData[filialIdNumber as keyof typeof filiaisData]) {
+        setFilial(filiaisData[filialIdNumber as keyof typeof filiaisData]);
+        setDesempenhoData(getDesempenhoData(filialIdNumber));
+        
+        if (supervisoresData[filialIdNumber as keyof typeof supervisoresData]) {
+          setSupervisores(supervisoresData[filialIdNumber as keyof typeof supervisoresData]);
+        }
+        
+        document.title = `Filial: ${filiaisData[filialIdNumber as keyof typeof filiaisData].nome} | Admin | Heineken SP SUL`;
+      } else {
+        navigate("/admin/filiais");
       }
-      
-      document.title = `Filial: ${filiaisData[filialId as keyof typeof filiaisData].nome} | Admin | Heineken SP SUL`;
-    } else {
-      navigate("/admin/filiais");
     }
   }, [filialId, navigate]);
   

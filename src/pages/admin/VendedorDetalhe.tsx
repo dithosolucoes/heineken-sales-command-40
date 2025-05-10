@@ -48,7 +48,7 @@ const vendedoresData = {
 };
 
 // Dados de exemplo para o gráfico de desempenho
-const getDesempenhoData = (vendedorId: string) => [
+const getDesempenhoData = (vendedorId: number) => [
   { nome: "Jan", vendas: 5800, conversoes: 74 },
   { nome: "Fev", vendas: 6200, conversoes: 75 },
   { nome: "Mar", vendas: 6100, conversoes: 73 },
@@ -58,7 +58,7 @@ const getDesempenhoData = (vendedorId: string) => [
 ];
 
 // Dados de exemplo para missões
-const getMissoesData = (vendedorId: string) => [
+const getMissoesData = (vendedorId: number) => [
   { nome: "Semana 1", concluidas: 4, total: 5 },
   { nome: "Semana 2", concluidas: 5, total: 5 },
   { nome: "Semana 3", concluidas: 3, total: 5 },
@@ -66,7 +66,7 @@ const getMissoesData = (vendedorId: string) => [
 ];
 
 // Dados de exemplo para PDVs do vendedor
-const getPdvsVendedor = (vendedorId: string) => [
+const getPdvsVendedor = (vendedorId: number) => [
   { id: 1, nome: "Bar do Zé", bairro: "Centro", conversao: "Sim", vendasMes: "R$ 2.450,00" },
   { id: 2, nome: "Mercearia Central", bairro: "Jardins", conversao: "Sim", vendasMes: "R$ 3.120,00" },
   { id: 3, nome: "Mercado São Paulo", bairro: "Pinheiros", conversao: "Sim", vendasMes: "R$ 2.870,00" },
@@ -83,15 +83,19 @@ const AdminVendedorDetalhe = () => {
   const [pdvsList, setPdvsList] = useState<any[]>([]);
   
   useEffect(() => {
-    if (vendedorId && vendedoresData[vendedorId as keyof typeof vendedoresData]) {
-      setVendedor(vendedoresData[vendedorId as keyof typeof vendedoresData]);
-      setDesempenhoData(getDesempenhoData(vendedorId));
-      setMissoesData(getMissoesData(vendedorId));
-      setPdvsList(getPdvsVendedor(vendedorId));
+    if (vendedorId) {
+      const vendedorIdNumber = parseInt(vendedorId, 10);
       
-      document.title = `Vendedor: ${vendedoresData[vendedorId as keyof typeof vendedoresData].nome} | Admin | Heineken SP SUL`;
-    } else {
-      navigate("/admin/filiais");
+      if (vendedoresData[vendedorIdNumber as keyof typeof vendedoresData]) {
+        setVendedor(vendedoresData[vendedorIdNumber as keyof typeof vendedoresData]);
+        setDesempenhoData(getDesempenhoData(vendedorIdNumber));
+        setMissoesData(getMissoesData(vendedorIdNumber));
+        setPdvsList(getPdvsVendedor(vendedorIdNumber));
+        
+        document.title = `Vendedor: ${vendedoresData[vendedorIdNumber as keyof typeof vendedoresData].nome} | Admin | Heineken SP SUL`;
+      } else {
+        navigate("/admin/filiais");
+      }
     }
   }, [vendedorId, navigate]);
   
