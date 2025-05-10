@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  userType: "vendedor";
+  userType: "vendedor" | "supervisor" | "admin";
   pageTitle: string;
 }
 

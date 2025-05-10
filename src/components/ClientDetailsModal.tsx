@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, MapPin, Phone, Store, ChevronRight, Target } from "lucide-react";
+import { Calendar, MapPin, Phone, Store, ChevronRight } from "lucide-react";
 import { ClientData } from "@/types/client";
 import { getPotentialColor } from "@/utils/clientData";
 import TargetButton from "./TargetButton";
@@ -76,7 +76,9 @@ const ClientDetailsModal = ({
           <div className="flex items-center text-tactical-silver mb-4">
             <MapPin size={14} className="mr-2 flex-shrink-0" />
             <span>
-              {client.address.street}, {client.address.neighborhood}, {client.address.city}
+              {client.address.street}, {client.address.number} -{" "}
+              {client.address.neighborhood}, {client.address.city}/
+              {client.address.state}
             </span>
           </div>
 
@@ -134,7 +136,7 @@ const ClientDetailsModal = ({
               <div className="tactical-panel p-3 mb-6">
                 <h3 className="text-xs text-tactical-silver mb-2">OBSERVAÇÕES</h3>
                 <p className="text-sm">
-                  {client.observations || "Sem observações adicionais."}
+                  {client.notes || "Sem observações adicionais."}
                 </p>
               </div>
 
