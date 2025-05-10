@@ -26,7 +26,7 @@ const SupervisorComparativoChart = ({ data, type }: ComparativoChartProps) => {
       data={chartData}
       keys={["taxa"]}
       indexBy="equipe"
-      margin={{ top: 20, right: 20, bottom: 60, left: 60 }}
+      margin={{ top: 20, right: 20, bottom: 100, left: 60 }} // Increased bottom margin to show labels
       padding={0.3}
       valueScale={{ type: "linear" }}
       colors={({ data }) => data.taxaColor}
@@ -36,10 +36,10 @@ const SupervisorComparativoChart = ({ data, type }: ComparativoChartProps) => {
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
-        tickRotation: -45,
+        tickRotation: -45, // Angled labels for better readability
         legend: type === "supervisores" ? "Equipes" : "Filiais",
         legendPosition: "middle",
-        legendOffset: 50,
+        legendOffset: 70, // Increased offset for legend
         truncateTickAt: 0
       }}
       axisLeft={{

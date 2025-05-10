@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Plus, Filter, CheckCircle, AlertCircle, Calendar } from "lucide-react";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
@@ -223,7 +224,7 @@ const SupervisorMissoes = () => {
         </div>
       </div>
 
-      {/* Sheet modal para detalhes da missão */}
+      {/* Sheet modal for mission details */}
       <Sheet open={isDetailOpen} onOpenChange={setIsDetailOpen}>
         <SheetContent className="bg-tactical-black border-heineken/30 w-full sm:max-w-lg overflow-y-auto">
           <SheetHeader className="border-b border-heineken/20 pb-4">
