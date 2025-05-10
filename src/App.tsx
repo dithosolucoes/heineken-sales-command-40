@@ -17,6 +17,9 @@ import VendedorRanking from "./pages/vendedor/Ranking";
 import SupervisorDashboard from "./pages/supervisor/Dashboard";
 import SupervisorComparativo from "./pages/supervisor/Comparativo";
 
+// Página do Admin
+import AdminDashboard from "./pages/admin/Dashboard";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -36,6 +39,9 @@ const App = () => (
           {/* Rotas do Supervisor */}
           <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />
           <Route path="/supervisor/comparativo" element={<SupervisorComparativo />} />
+          
+          {/* Rotas do Admin */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           
           {/* Rotas legadas (redirecionamento) */}
           <Route path="/dashboard" element={<Navigate to="/vendedor/dashboard" replace />} />
