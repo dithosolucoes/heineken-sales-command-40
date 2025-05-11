@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, ArrowRight, User, BarChart3, Target } from "lucide-react";
+import { Users, ArrowRight, User, BarChart3, Target, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ResponsiveContainer,
@@ -16,46 +16,46 @@ import {
   Legend
 } from "recharts";
 
-// Dados de exemplo para supervisores
+// Dados de exemplo para supervisores - removidas referências financeiras
 const supervisoresData = {
-  101: { nome: "Carlos Silva", filial: "São Paulo - Capital", filialId: 1, pdvs: 85, vendasTotal: "R$ 132.450,00", conversao: "75%" },
-  102: { nome: "Ana Oliveira", filial: "São Paulo - Capital", filialId: 1, pdvs: 90, vendasTotal: "R$ 128.780,00", conversao: "71%" },
-  103: { nome: "Roberto Almeida", filial: "São Paulo - Capital", filialId: 1, pdvs: 82, vendasTotal: "R$ 102.340,00", conversao: "68%" },
-  104: { nome: "Juliana Santos", filial: "São Paulo - Capital", filialId: 1, pdvs: 83, vendasTotal: "R$ 89.210,00", conversao: "65%" },
-  201: { nome: "Marcos Pereira", filial: "ABC Paulista", filialId: 2, pdvs: 75, vendasTotal: "R$ 118.320,00", conversao: "70%" },
-  202: { nome: "Fernanda Lima", filial: "ABC Paulista", filialId: 2, pdvs: 72, vendasTotal: "R$ 104.670,00", conversao: "67%" },
-  203: { nome: "Ricardo Costa", filial: "ABC Paulista", filialId: 2, pdvs: 73, vendasTotal: "R$ 95.460,00", conversao: "66%" },
-  301: { nome: "Leonardo Martins", filial: "Campinas", filialId: 3, pdvs: 90, vendasTotal: "R$ 142.180,00", conversao: "72%" },
-  302: { nome: "Cristina Barbosa", filial: "Campinas", filialId: 3, pdvs: 90, vendasTotal: "R$ 122.140,00", conversao: "68%" },
-  401: { nome: "Paulo Ferreira", filial: "Litoral", filialId: 4, pdvs: 75, vendasTotal: "R$ 98.340,00", conversao: "64%" },
-  402: { nome: "Mariana Dias", filial: "Litoral", filialId: 4, pdvs: 75, vendasTotal: "R$ 100.330,00", conversao: "62%" }
+  101: { nome: "Carlos Silva", filial: "São Paulo - Capital", filialId: 1, pdvs: 85, conversao: "75%" },
+  102: { nome: "Ana Oliveira", filial: "São Paulo - Capital", filialId: 1, pdvs: 90, conversao: "71%" },
+  103: { nome: "Roberto Almeida", filial: "São Paulo - Capital", filialId: 1, pdvs: 82, conversao: "68%" },
+  104: { nome: "Juliana Santos", filial: "São Paulo - Capital", filialId: 1, pdvs: 83, conversao: "65%" },
+  201: { nome: "Marcos Pereira", filial: "ABC Paulista", filialId: 2, pdvs: 75, conversao: "70%" },
+  202: { nome: "Fernanda Lima", filial: "ABC Paulista", filialId: 2, pdvs: 72, conversao: "67%" },
+  203: { nome: "Ricardo Costa", filial: "ABC Paulista", filialId: 2, pdvs: 73, conversao: "66%" },
+  301: { nome: "Leonardo Martins", filial: "Campinas", filialId: 3, pdvs: 90, conversao: "72%" },
+  302: { nome: "Cristina Barbosa", filial: "Campinas", filialId: 3, pdvs: 90, conversao: "68%" },
+  401: { nome: "Paulo Ferreira", filial: "Litoral", filialId: 4, pdvs: 75, conversao: "64%" },
+  402: { nome: "Mariana Dias", filial: "Litoral", filialId: 4, pdvs: 75, conversao: "62%" }
 };
 
-// Dados de exemplo para vendedores de um supervisor
+// Dados de exemplo para vendedores de um supervisor - removidas referências financeiras
 const vendedoresData = {
   101: [
-    { id: 1001, nome: "Pedro Souza", pdvs: 22, vendasTotal: "R$ 38.450,00", missoesConcluidas: 18, conversao: "76%" },
-    { id: 1002, nome: "Tatiana Alves", pdvs: 20, vendasTotal: "R$ 35.780,00", missoesConcluidas: 16, conversao: "74%" },
-    { id: 1003, nome: "Fábio Gomes", pdvs: 21, vendasTotal: "R$ 30.340,00", missoesConcluidas: 15, conversao: "72%" },
-    { id: 1004, nome: "Carla Mendes", pdvs: 22, vendasTotal: "R$ 27.880,00", missoesConcluidas: 14, conversao: "70%" }
+    { id: 1001, nome: "Pedro Souza", pdvs: 22, missoesConcluidas: 18, alvosAtingidos: 28, conversao: "76%" },
+    { id: 1002, nome: "Tatiana Alves", pdvs: 20, missoesConcluidas: 16, alvosAtingidos: 25, conversao: "74%" },
+    { id: 1003, nome: "Fábio Gomes", pdvs: 21, missoesConcluidas: 15, alvosAtingidos: 22, conversao: "72%" },
+    { id: 1004, nome: "Carla Mendes", pdvs: 22, missoesConcluidas: 14, alvosAtingidos: 21, conversao: "70%" }
   ],
   102: [
-    { id: 1005, nome: "Rodrigo Lima", pdvs: 23, vendasTotal: "R$ 34.120,00", missoesConcluidas: 19, conversao: "75%" },
-    { id: 1006, nome: "Amanda Costa", pdvs: 22, vendasTotal: "R$ 32.450,00", missoesConcluidas: 17, conversao: "73%" },
-    { id: 1007, nome: "Bruno Santos", pdvs: 23, vendasTotal: "R$ 31.780,00", missoesConcluidas: 16, conversao: "72%" },
-    { id: 1008, nome: "Daniela Silva", pdvs: 22, vendasTotal: "R$ 30.430,00", missoesConcluidas: 15, conversao: "70%" }
+    { id: 1005, nome: "Rodrigo Lima", pdvs: 23, missoesConcluidas: 19, alvosAtingidos: 26, conversao: "75%" },
+    { id: 1006, nome: "Amanda Costa", pdvs: 22, missoesConcluidas: 17, alvosAtingidos: 24, conversao: "73%" },
+    { id: 1007, nome: "Bruno Santos", pdvs: 23, missoesConcluidas: 16, alvosAtingidos: 23, conversao: "72%" },
+    { id: 1008, nome: "Daniela Silva", pdvs: 22, missoesConcluidas: 15, alvosAtingidos: 22, conversao: "70%" }
   ],
   // ... dados para outros supervisores
 };
 
-// Dados de exemplo para o gráfico de desempenho
+// Dados de exemplo para o gráfico de desempenho - removidas referências financeiras
 const getDesempenhoData = (supervisorId: number) => [
-  { nome: "Jan", vendas: 22000, conversoes: 72 },
-  { nome: "Fev", vendas: 24500, conversoes: 74 },
-  { nome: "Mar", vendas: 23800, conversoes: 71 },
-  { nome: "Abr", vendas: 25600, conversoes: 75 },
-  { nome: "Mai", vendas: 26400, conversoes: 76 },
-  { nome: "Jun", vendas: 28200, conversoes: 78 }
+  { nome: "Jan", missoes: 18, conversoes: 72 },
+  { nome: "Fev", missoes: 20, conversoes: 74 },
+  { nome: "Mar", missoes: 19, conversoes: 71 },
+  { nome: "Abr", missoes: 22, conversoes: 75 },
+  { nome: "Mai", missoes: 24, conversoes: 76 },
+  { nome: "Jun", missoes: 26, conversoes: 78 }
 ];
 
 const AdminSupervisorDetalhe = () => {
@@ -110,14 +110,10 @@ const AdminSupervisorDetalhe = () => {
                 <p className="text-white font-medium">{supervisor.filial}</p>
               </div>
               
-              <div className="grid grid-cols-3 gap-8 mt-4 md:mt-0">
+              <div className="grid grid-cols-2 gap-8 mt-4 md:mt-0">
                 <div>
                   <p className="text-tactical-silver text-sm">PDVs</p>
                   <p className="text-2xl font-bold text-white">{supervisor.pdvs}</p>
-                </div>
-                <div>
-                  <p className="text-tactical-silver text-sm">Vendas</p>
-                  <p className="text-2xl font-bold text-heineken">{supervisor.vendasTotal}</p>
                 </div>
                 <div>
                   <p className="text-tactical-silver text-sm">Conversão</p>
@@ -156,7 +152,7 @@ const AdminSupervisorDetalhe = () => {
                     labelStyle={{ color: '#ccc' }}
                   />
                   <Legend wrapperStyle={{ color: '#ccc' }} />
-                  <Bar dataKey="vendas" name="Vendas (R$)" fill="#8eff00" />
+                  <Bar dataKey="missoes" name="Missões" fill="#8eff00" />
                   <Bar dataKey="conversoes" name="Conversões (%)" fill="#28a745" />
                 </BarChart>
               </ResponsiveContainer>
@@ -204,8 +200,8 @@ const AdminSupervisorDetalhe = () => {
                         <p className="text-sm font-semibold text-white">{vendedor.missoesConcluidas}</p>
                       </div>
                       <div className="text-tactical-silver">
-                        <p className="text-xs">Vendas</p>
-                        <p className="text-sm font-semibold text-heineken">{vendedor.vendasTotal}</p>
+                        <p className="text-xs">Alvos Atingidos</p>
+                        <p className="text-sm font-semibold text-heineken">{vendedor.alvosAtingidos}</p>
                       </div>
                       <div className="text-tactical-silver">
                         <p className="text-xs">Conversão</p>
