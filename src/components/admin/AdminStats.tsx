@@ -14,6 +14,14 @@ import {
   Tooltip, 
   Legend 
 } from "recharts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const AdminStats = () => {
   // Dados simulados para o dashboard
@@ -37,19 +45,25 @@ const AdminStats = () => {
   const [topFiliais] = useState([
     { id: 1, nome: "São Paulo - Capital", pontos: 4350, conversao: "78%" },
     { id: 2, nome: "ABC Paulista", pontos: 3200, conversao: "72%" },
-    { id: 3, nome: "Campinas", pontos: 2800, conversao: "70%" }
+    { id: 3, nome: "Campinas", pontos: 2800, conversao: "70%" },
+    { id: 4, nome: "Litoral", pontos: 2100, conversao: "68%" },
+    { id: 5, nome: "Sorocaba", pontos: 1850, conversao: "65%" }
   ]);
 
   const [topSupervisores] = useState([
     { id: 1, nome: "Carlos Oliveira", filial: "São Paulo - Capital", pontos: 1240, conversao: "82%" },
     { id: 2, nome: "Ana Silva", filial: "ABC Paulista", pontos: 1180, conversao: "79%" },
-    { id: 3, nome: "Roberto Santos", filial: "São Paulo - Capital", pontos: 1050, conversao: "75%" }
+    { id: 3, nome: "Roberto Santos", filial: "São Paulo - Capital", pontos: 1050, conversao: "75%" },
+    { id: 4, nome: "Luciana Costa", filial: "Campinas", pontos: 980, conversao: "73%" },
+    { id: 5, nome: "Márcio Pereira", filial: "São Paulo - Capital", pontos: 920, conversao: "70%" }
   ]);
 
   const [topVendedores] = useState([
     { id: 1, nome: "João Silva", supervisor: "Carlos Oliveira", pontos: 320, conversao: "85%" },
     { id: 2, nome: "Maria Santos", supervisor: "Ana Silva", pontos: 305, conversao: "83%" },
-    { id: 3, nome: "Pedro Almeida", supervisor: "Roberto Santos", pontos: 290, conversao: "81%" }
+    { id: 3, nome: "Pedro Almeida", supervisor: "Roberto Santos", pontos: 290, conversao: "81%" },
+    { id: 4, nome: "Camila Lima", supervisor: "Carlos Oliveira", pontos: 275, conversao: "79%" },
+    { id: 5, nome: "Lucas Martins", supervisor: "Luciana Costa", pontos: 260, conversao: "77%" }
   ]);
 
   return (
@@ -209,7 +223,7 @@ const AdminStats = () => {
         </Card>
       </div>
 
-      {/* Novo Bloco de Ranking */}
+      {/* Novo Bloco de Ranking - Agora com tabelas completas */}
       <Card className="bg-tactical-darkgray/80 border-heineken/30">
         <CardHeader>
           <CardTitle className="text-lg font-medium text-white flex items-center">
@@ -236,271 +250,146 @@ const AdminStats = () => {
 
             {/* Tab de Filiais */}
             <TabsContent value="filiais">
-              <div className="grid grid-cols-1 gap-4">
-                {/* Pódio */}
-                <div className="flex flex-col md:flex-row gap-4 mb-4">
-                  {/* Top 3 Filiais em formato de pódio */}
-                  <div className="flex items-end justify-center h-52 space-x-2 flex-1">
-                    {/* 2º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-20 h-20 rounded-full bg-tactical-black border-2 border-[#C0C0C0] flex items-center justify-center mb-2">
-                        <Trophy size={32} className="text-[#C0C0C0]" />
-                      </div>
-                      <div className="w-20 h-28 bg-tactical-black/50 border-t-2 border-[#C0C0C0] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#C0C0C0] font-bold">2º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topFiliais[1].nome}</span>
-                        <span className="text-[#C0C0C0] text-xs mt-1">{topFiliais[1].pontos} pts</span>
-                      </div>
-                    </div>
-                    
-                    {/* 1º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-24 h-24 rounded-full bg-tactical-black border-2 border-[#FFD700] flex items-center justify-center mb-2">
-                        <Trophy size={40} className="text-[#FFD700]" />
-                      </div>
-                      <div className="w-24 h-36 bg-tactical-black/50 border-t-2 border-[#FFD700] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#FFD700] font-bold text-lg">1º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topFiliais[0].nome}</span>
-                        <span className="text-[#FFD700] text-xs mt-1">{topFiliais[0].pontos} pts</span>
-                      </div>
-                    </div>
-                    
-                    {/* 3º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-18 h-18 rounded-full bg-tactical-black border-2 border-[#CD7F32] flex items-center justify-center mb-2">
-                        <Trophy size={28} className="text-[#CD7F32]" />
-                      </div>
-                      <div className="w-18 h-24 bg-tactical-black/50 border-t-2 border-[#CD7F32] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#CD7F32] font-bold">3º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topFiliais[2].nome}</span>
-                        <span className="text-[#CD7F32] text-xs mt-1">{topFiliais[2].pontos} pts</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Estatísticas adicionais */}
-                  <div className="flex-1 bg-tactical-black/30 p-4 rounded-md">
-                    <h4 className="text-sm font-medium text-heineken mb-4">Estatísticas Top 3 Filiais</h4>
-                    <div className="space-y-3">
-                      {topFiliais.map((filial, index) => (
-                        <div key={filial.id} className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-white">
-                              {index === 0 && <Award size={14} className="inline mr-1 text-[#FFD700]" />}
-                              {index === 1 && <Award size={14} className="inline mr-1 text-[#C0C0C0]" />}
-                              {index === 2 && <Award size={14} className="inline mr-1 text-[#CD7F32]" />}
-                              {filial.nome}
-                            </span>
-                            <span className="text-sm text-tactical-silver">{filial.conversao}</span>
-                          </div>
-                          <div className="w-full bg-tactical-darkgray h-2 rounded-full">
-                            <div 
-                              className={`h-2 rounded-full ${
-                                index === 0 ? 'bg-[#FFD700]' : 
-                                index === 1 ? 'bg-[#C0C0C0]' : 
-                                'bg-[#CD7F32]'
-                              }`} 
-                              style={{ width: filial.conversao }}
-                            ></div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Link para relatório completo */}
-                <div className="text-center">
-                  <a 
-                    href="/admin/ranking" 
-                    className="text-sm text-heineken hover:underline inline-flex items-center"
-                  >
-                    Ver ranking completo de filiais
-                    <span className="ml-1">→</span>
-                  </a>
-                </div>
+              <div className="rounded-md border border-heineken/20 overflow-hidden">
+                <Table>
+                  <TableHeader className="bg-tactical-black">
+                    <TableRow className="border-heineken/20 hover:bg-transparent">
+                      <TableHead className="text-tactical-silver w-16">#</TableHead>
+                      <TableHead className="text-tactical-silver">Filial</TableHead>
+                      <TableHead className="text-tactical-silver text-right">Pontos</TableHead>
+                      <TableHead className="text-tactical-silver text-right">Conversão</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {topFiliais.map((filial, index) => (
+                      <TableRow 
+                        key={filial.id} 
+                        className={`border-heineken/10 hover:bg-tactical-black/50 ${index < 3 ? 'bg-heineken/5' : ''}`}
+                      >
+                        <TableCell className={`text-center font-bold ${
+                          index === 0 ? 'text-[#FFD700]' : 
+                          index === 1 ? 'text-[#C0C0C0]' : 
+                          index === 2 ? 'text-[#CD7F32]' : 
+                          'text-white'
+                        }`}>
+                          {index + 1}
+                        </TableCell>
+                        <TableCell className="font-medium text-heineken-neon">
+                          {filial.nome}
+                        </TableCell>
+                        <TableCell className="text-right font-bold">{filial.pontos.toLocaleString()}</TableCell>
+                        <TableCell className="text-right text-heineken">{filial.conversao}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="text-center mt-4">
+                <a 
+                  href="/admin/ranking" 
+                  className="text-sm text-heineken hover:underline inline-flex items-center"
+                >
+                  Ver ranking completo de filiais
+                  <span className="ml-1">→</span>
+                </a>
               </div>
             </TabsContent>
 
             {/* Tab de Supervisores */}
             <TabsContent value="supervisores">
-              <div className="grid grid-cols-1 gap-4">
-                {/* Pódio */}
-                <div className="flex flex-col md:flex-row gap-4 mb-4">
-                  {/* Top 3 Supervisores em formato de pódio */}
-                  <div className="flex items-end justify-center h-52 space-x-2 flex-1">
-                    {/* 2º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-20 h-20 rounded-full bg-tactical-black border-2 border-[#C0C0C0] flex items-center justify-center mb-2">
-                        <Users size={32} className="text-[#C0C0C0]" />
-                      </div>
-                      <div className="w-20 h-28 bg-tactical-black/50 border-t-2 border-[#C0C0C0] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#C0C0C0] font-bold">2º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topSupervisores[1].nome}</span>
-                        <span className="text-[#C0C0C0] text-xs mt-1">{topSupervisores[1].pontos} pts</span>
-                      </div>
-                    </div>
-                    
-                    {/* 1º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-24 h-24 rounded-full bg-tactical-black border-2 border-[#FFD700] flex items-center justify-center mb-2">
-                        <Users size={40} className="text-[#FFD700]" />
-                      </div>
-                      <div className="w-24 h-36 bg-tactical-black/50 border-t-2 border-[#FFD700] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#FFD700] font-bold text-lg">1º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topSupervisores[0].nome}</span>
-                        <span className="text-[#FFD700] text-xs mt-1">{topSupervisores[0].pontos} pts</span>
-                      </div>
-                    </div>
-                    
-                    {/* 3º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-18 h-18 rounded-full bg-tactical-black border-2 border-[#CD7F32] flex items-center justify-center mb-2">
-                        <Users size={28} className="text-[#CD7F32]" />
-                      </div>
-                      <div className="w-18 h-24 bg-tactical-black/50 border-t-2 border-[#CD7F32] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#CD7F32] font-bold">3º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topSupervisores[2].nome}</span>
-                        <span className="text-[#CD7F32] text-xs mt-1">{topSupervisores[2].pontos} pts</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Estatísticas adicionais */}
-                  <div className="flex-1 bg-tactical-black/30 p-4 rounded-md">
-                    <h4 className="text-sm font-medium text-heineken mb-4">Estatísticas Top 3 Supervisores</h4>
-                    <div className="space-y-3">
-                      {topSupervisores.map((supervisor, index) => (
-                        <div key={supervisor.id} className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-white">
-                              {index === 0 && <Award size={14} className="inline mr-1 text-[#FFD700]" />}
-                              {index === 1 && <Award size={14} className="inline mr-1 text-[#C0C0C0]" />}
-                              {index === 2 && <Award size={14} className="inline mr-1 text-[#CD7F32]" />}
-                              {supervisor.nome}
-                            </span>
-                            <span className="text-sm text-tactical-silver">{supervisor.conversao}</span>
-                          </div>
-                          <div className="flex justify-between text-xs text-tactical-silver mb-1">
-                            <span>{supervisor.filial}</span>
-                          </div>
-                          <div className="w-full bg-tactical-darkgray h-2 rounded-full">
-                            <div 
-                              className={`h-2 rounded-full ${
-                                index === 0 ? 'bg-[#FFD700]' : 
-                                index === 1 ? 'bg-[#C0C0C0]' : 
-                                'bg-[#CD7F32]'
-                              }`} 
-                              style={{ width: supervisor.conversao }}
-                            ></div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Link para relatório completo */}
-                <div className="text-center">
-                  <a 
-                    href="/admin/ranking" 
-                    className="text-sm text-heineken hover:underline inline-flex items-center"
-                  >
-                    Ver ranking completo de supervisores
-                    <span className="ml-1">→</span>
-                  </a>
-                </div>
+              <div className="rounded-md border border-heineken/20 overflow-hidden">
+                <Table>
+                  <TableHeader className="bg-tactical-black">
+                    <TableRow className="border-heineken/20 hover:bg-transparent">
+                      <TableHead className="text-tactical-silver w-16">#</TableHead>
+                      <TableHead className="text-tactical-silver">Supervisor</TableHead>
+                      <TableHead className="text-tactical-silver">Filial</TableHead>
+                      <TableHead className="text-tactical-silver text-right">Pontos</TableHead>
+                      <TableHead className="text-tactical-silver text-right">Conversão</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {topSupervisores.map((supervisor, index) => (
+                      <TableRow 
+                        key={supervisor.id} 
+                        className={`border-heineken/10 hover:bg-tactical-black/50 ${index < 3 ? 'bg-heineken/5' : ''}`}
+                      >
+                        <TableCell className={`text-center font-bold ${
+                          index === 0 ? 'text-[#FFD700]' : 
+                          index === 1 ? 'text-[#C0C0C0]' : 
+                          index === 2 ? 'text-[#CD7F32]' : 
+                          'text-white'
+                        }`}>
+                          {index + 1}
+                        </TableCell>
+                        <TableCell className="font-medium text-heineken-neon">
+                          {supervisor.nome}
+                        </TableCell>
+                        <TableCell>{supervisor.filial}</TableCell>
+                        <TableCell className="text-right font-bold">{supervisor.pontos.toLocaleString()}</TableCell>
+                        <TableCell className="text-right text-heineken">{supervisor.conversao}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="text-center mt-4">
+                <a 
+                  href="/admin/ranking" 
+                  className="text-sm text-heineken hover:underline inline-flex items-center"
+                >
+                  Ver ranking completo de supervisores
+                  <span className="ml-1">→</span>
+                </a>
               </div>
             </TabsContent>
 
             {/* Tab de Vendedores */}
             <TabsContent value="vendedores">
-              <div className="grid grid-cols-1 gap-4">
-                {/* Pódio */}
-                <div className="flex flex-col md:flex-row gap-4 mb-4">
-                  {/* Top 3 Vendedores em formato de pódio */}
-                  <div className="flex items-end justify-center h-52 space-x-2 flex-1">
-                    {/* 2º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-20 h-20 rounded-full bg-tactical-black border-2 border-[#C0C0C0] flex items-center justify-center mb-2">
-                        <Medal size={32} className="text-[#C0C0C0]" />
-                      </div>
-                      <div className="w-20 h-28 bg-tactical-black/50 border-t-2 border-[#C0C0C0] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#C0C0C0] font-bold">2º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topVendedores[1].nome}</span>
-                        <span className="text-[#C0C0C0] text-xs mt-1">{topVendedores[1].pontos} pts</span>
-                      </div>
-                    </div>
-                    
-                    {/* 1º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-24 h-24 rounded-full bg-tactical-black border-2 border-[#FFD700] flex items-center justify-center mb-2">
-                        <Medal size={40} className="text-[#FFD700]" />
-                      </div>
-                      <div className="w-24 h-36 bg-tactical-black/50 border-t-2 border-[#FFD700] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#FFD700] font-bold text-lg">1º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topVendedores[0].nome}</span>
-                        <span className="text-[#FFD700] text-xs mt-1">{topVendedores[0].pontos} pts</span>
-                      </div>
-                    </div>
-                    
-                    {/* 3º lugar */}
-                    <div className="flex flex-col items-center">
-                      <div className="w-18 h-18 rounded-full bg-tactical-black border-2 border-[#CD7F32] flex items-center justify-center mb-2">
-                        <Medal size={28} className="text-[#CD7F32]" />
-                      </div>
-                      <div className="w-18 h-24 bg-tactical-black/50 border-t-2 border-[#CD7F32] flex flex-col items-center justify-center rounded-t-md">
-                        <span className="text-[#CD7F32] font-bold">3º</span>
-                        <span className="text-xs text-white text-center mt-1 px-1">{topVendedores[2].nome}</span>
-                        <span className="text-[#CD7F32] text-xs mt-1">{topVendedores[2].pontos} pts</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Estatísticas adicionais */}
-                  <div className="flex-1 bg-tactical-black/30 p-4 rounded-md">
-                    <h4 className="text-sm font-medium text-heineken mb-4">Estatísticas Top 3 Vendedores</h4>
-                    <div className="space-y-3">
-                      {topVendedores.map((vendedor, index) => (
-                        <div key={vendedor.id} className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-white">
-                              {index === 0 && <Award size={14} className="inline mr-1 text-[#FFD700]" />}
-                              {index === 1 && <Award size={14} className="inline mr-1 text-[#C0C0C0]" />}
-                              {index === 2 && <Award size={14} className="inline mr-1 text-[#CD7F32]" />}
-                              {vendedor.nome}
-                            </span>
-                            <span className="text-sm text-tactical-silver">{vendedor.conversao}</span>
-                          </div>
-                          <div className="flex justify-between text-xs text-tactical-silver mb-1">
-                            <span>Sup: {vendedor.supervisor}</span>
-                          </div>
-                          <div className="w-full bg-tactical-darkgray h-2 rounded-full">
-                            <div 
-                              className={`h-2 rounded-full ${
-                                index === 0 ? 'bg-[#FFD700]' : 
-                                index === 1 ? 'bg-[#C0C0C0]' : 
-                                'bg-[#CD7F32]'
-                              }`} 
-                              style={{ width: vendedor.conversao }}
-                            ></div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Link para relatório completo */}
-                <div className="text-center">
-                  <a 
-                    href="/admin/ranking" 
-                    className="text-sm text-heineken hover:underline inline-flex items-center"
-                  >
-                    Ver ranking completo de vendedores
-                    <span className="ml-1">→</span>
-                  </a>
-                </div>
+              <div className="rounded-md border border-heineken/20 overflow-hidden">
+                <Table>
+                  <TableHeader className="bg-tactical-black">
+                    <TableRow className="border-heineken/20 hover:bg-transparent">
+                      <TableHead className="text-tactical-silver w-16">#</TableHead>
+                      <TableHead className="text-tactical-silver">Vendedor</TableHead>
+                      <TableHead className="text-tactical-silver">Supervisor</TableHead>
+                      <TableHead className="text-tactical-silver text-right">Pontos</TableHead>
+                      <TableHead className="text-tactical-silver text-right">Conversão</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {topVendedores.map((vendedor, index) => (
+                      <TableRow 
+                        key={vendedor.id} 
+                        className={`border-heineken/10 hover:bg-tactical-black/50 ${index < 3 ? 'bg-heineken/5' : ''}`}
+                      >
+                        <TableCell className={`text-center font-bold ${
+                          index === 0 ? 'text-[#FFD700]' : 
+                          index === 1 ? 'text-[#C0C0C0]' : 
+                          index === 2 ? 'text-[#CD7F32]' : 
+                          'text-white'
+                        }`}>
+                          {index + 1}
+                        </TableCell>
+                        <TableCell className="font-medium text-heineken-neon">
+                          {vendedor.nome}
+                        </TableCell>
+                        <TableCell>{vendedor.supervisor}</TableCell>
+                        <TableCell className="text-right font-bold">{vendedor.pontos}</TableCell>
+                        <TableCell className="text-right text-heineken">{vendedor.conversao}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="text-center mt-4">
+                <a 
+                  href="/admin/ranking" 
+                  className="text-sm text-heineken hover:underline inline-flex items-center"
+                >
+                  Ver ranking completo de vendedores
+                  <span className="ml-1">→</span>
+                </a>
               </div>
             </TabsContent>
           </Tabs>
@@ -511,4 +400,3 @@ const AdminStats = () => {
 };
 
 export default AdminStats;
-
