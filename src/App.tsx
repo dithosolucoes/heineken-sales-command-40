@@ -26,6 +26,7 @@ import AdminFilialDetalhe from "./pages/admin/FilialDetalhe";
 import AdminSupervisorDetalhe from "./pages/admin/SupervisorDetalhe";
 import AdminVendedorDetalhe from "./pages/admin/VendedorDetalhe";
 import AdminUploadData from "./pages/admin/UploadData"; 
+import AdminRanking from "./pages/admin/Ranking"; // Nova página de Ranking
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
           <Route path="/admin/supervisor/:supervisorId" element={<AdminSupervisorDetalhe />} />
           <Route path="/admin/vendedor/:vendedorId" element={<AdminVendedorDetalhe />} />
           <Route path="/admin/upload-data" element={<AdminUploadData />} />
+          <Route path="/admin/ranking" element={<AdminRanking />} /> {/* Nova rota de Ranking */}
           
           {/* Rota 404 */}
           <Route path="*" element={<NotFound />} />
