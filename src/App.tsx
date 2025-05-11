@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 // Páginas do Vendedor
 import VendedorDashboard from "./pages/vendedor/Dashboard";
 import VendedorRanking from "./pages/vendedor/Ranking";
+import VendedorRelatorio from "./pages/vendedor/Relatorio";
 
 // Páginas do Supervisor
 import SupervisorDashboard from "./pages/supervisor/Dashboard";
@@ -24,6 +25,7 @@ import AdminFiliais from "./pages/admin/Filiais";
 import AdminFilialDetalhe from "./pages/admin/FilialDetalhe";
 import AdminSupervisorDetalhe from "./pages/admin/SupervisorDetalhe";
 import AdminVendedorDetalhe from "./pages/admin/VendedorDetalhe";
+import AdminUploadData from "./pages/admin/UploadData"; 
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,7 @@ const App = () => (
           {/* Rotas do Vendedor */}
           <Route path="/vendedor/dashboard" element={<VendedorDashboard />} />
           <Route path="/vendedor/ranking" element={<VendedorRanking />} />
+          <Route path="/vendedor/relatorio" element={<VendedorRelatorio />} />
           
           {/* Rotas do Supervisor */}
           <Route path="/supervisor/dashboard" element={<SupervisorDashboard />} />
@@ -52,10 +55,7 @@ const App = () => (
           <Route path="/admin/filial/:filialId" element={<AdminFilialDetalhe />} />
           <Route path="/admin/supervisor/:supervisorId" element={<AdminSupervisorDetalhe />} />
           <Route path="/admin/vendedor/:vendedorId" element={<AdminVendedorDetalhe />} />
-          
-          {/* Rotas legadas (redirecionamento) */}
-          <Route path="/dashboard" element={<Navigate to="/vendedor/dashboard" replace />} />
-          <Route path="/vendedor/relatorio" element={<Navigate to="/vendedor/ranking" replace />} />
+          <Route path="/admin/upload-data" element={<AdminUploadData />} />
           
           {/* Rota 404 */}
           <Route path="*" element={<NotFound />} />

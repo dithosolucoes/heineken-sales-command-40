@@ -1,6 +1,7 @@
+
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, BarChart3, Target, Users, LogOut, Building, Database } from "lucide-react";
+import { Menu, X, ChevronDown, BarChart3, Target, Users, LogOut, Building, Upload } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -22,7 +23,8 @@ interface HeaderProps {
 const menuConfig = {
   vendedor: [
     { name: "Dashboard", path: "/vendedor/dashboard", icon: <BarChart3 size={18} /> },
-    { name: "Ranking", path: "/vendedor/ranking", icon: <BarChart3 size={18} /> }
+    { name: "Ranking", path: "/vendedor/ranking", icon: <BarChart3 size={18} /> },
+    { name: "Relatório", path: "/vendedor/relatorio", icon: <BarChart3 size={18} /> }
   ],
   supervisor: [
     { name: "Dashboard", path: "/supervisor/dashboard", icon: <BarChart3 size={18} /> },
@@ -31,7 +33,8 @@ const menuConfig = {
   ],
   admin: [
     { name: "Dashboard", path: "/admin/dashboard", icon: <BarChart3 size={18} /> },
-    { name: "Filiais", path: "/admin/filiais", icon: <Building size={18} /> }
+    { name: "Filiais", path: "/admin/filiais", icon: <Building size={18} /> },
+    { name: "Upload de Dados", path: "/admin/upload-data", icon: <Upload size={18} /> }
   ]
 };
 

@@ -27,7 +27,6 @@ const vendedoresData = {
     filial: "São Paulo - Capital",
     filialId: 1,
     pdvs: 22,
-    vendasTotal: "R$ 38.450,00",
     missoesConcluidas: 18, 
     metaMensal: 20,
     conversao: "76%"
@@ -39,7 +38,6 @@ const vendedoresData = {
     filial: "São Paulo - Capital",
     filialId: 1,
     pdvs: 20,
-    vendasTotal: "R$ 35.780,00",
     missoesConcluidas: 16, 
     metaMensal: 20,
     conversao: "74%"
@@ -49,12 +47,12 @@ const vendedoresData = {
 
 // Dados de exemplo para o gráfico de desempenho
 const getDesempenhoData = (vendedorId: number) => [
-  { nome: "Jan", vendas: 5800, conversoes: 74 },
-  { nome: "Fev", vendas: 6200, conversoes: 75 },
-  { nome: "Mar", vendas: 6100, conversoes: 73 },
-  { nome: "Abr", vendas: 6500, conversoes: 76 },
-  { nome: "Mai", vendas: 6700, conversoes: 77 },
-  { nome: "Jun", vendas: 7150, conversoes: 78 }
+  { nome: "Jan", conversoes: 74 },
+  { nome: "Fev", conversoes: 75 },
+  { nome: "Mar", conversoes: 73 },
+  { nome: "Abr", conversoes: 76 },
+  { nome: "Mai", conversoes: 77 },
+  { nome: "Jun", conversoes: 78 }
 ];
 
 // Dados de exemplo para missões
@@ -67,11 +65,11 @@ const getMissoesData = (vendedorId: number) => [
 
 // Dados de exemplo para PDVs do vendedor
 const getPdvsVendedor = (vendedorId: number) => [
-  { id: 1, nome: "Bar do Zé", bairro: "Centro", conversao: "Sim", vendasMes: "R$ 2.450,00" },
-  { id: 2, nome: "Mercearia Central", bairro: "Jardins", conversao: "Sim", vendasMes: "R$ 3.120,00" },
-  { id: 3, nome: "Mercado São Paulo", bairro: "Pinheiros", conversao: "Sim", vendasMes: "R$ 2.870,00" },
-  { id: 4, nome: "Conveniência Express", bairro: "Vila Mariana", conversao: "Não", vendasMes: "R$ 1.950,00" },
-  { id: 5, nome: "Adega 24h", bairro: "Itaim", conversao: "Sim", vendasMes: "R$ 3.540,00" }
+  { id: 1, nome: "Bar do Zé", bairro: "Centro", conversao: "Sim" },
+  { id: 2, nome: "Mercearia Central", bairro: "Jardins", conversao: "Sim" },
+  { id: 3, nome: "Mercado São Paulo", bairro: "Pinheiros", conversao: "Sim" },
+  { id: 4, nome: "Conveniência Express", bairro: "Vila Mariana", conversao: "Não" },
+  { id: 5, nome: "Adega 24h", bairro: "Itaim", conversao: "Sim" }
 ];
 
 const AdminVendedorDetalhe = () => {
@@ -127,14 +125,10 @@ const AdminVendedorDetalhe = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div>
                   <p className="text-tactical-silver text-sm">PDVs</p>
                   <p className="text-2xl font-bold text-white">{vendedor.pdvs}</p>
-                </div>
-                <div>
-                  <p className="text-tactical-silver text-sm">Vendas</p>
-                  <p className="text-2xl font-bold text-heineken">{vendedor.vendasTotal}</p>
                 </div>
                 <div>
                   <p className="text-tactical-silver text-sm">Missões</p>
@@ -178,7 +172,7 @@ const AdminVendedorDetalhe = () => {
                       labelStyle={{ color: '#ccc' }}
                     />
                     <Legend wrapperStyle={{ color: '#ccc' }} />
-                    <Bar dataKey="vendas" name="Vendas (R$)" fill="#8eff00" />
+                    <Bar dataKey="conversoes" name="Conversões (%)" fill="#8eff00" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -238,7 +232,6 @@ const AdminVendedorDetalhe = () => {
                     <th className="py-3 px-4">Nome</th>
                     <th className="py-3 px-4">Bairro</th>
                     <th className="py-3 px-4">Conversão</th>
-                    <th className="py-3 px-4">Vendas Mensais</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -252,7 +245,6 @@ const AdminVendedorDetalhe = () => {
                           {pdv.conversao}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-heineken-neon">{pdv.vendasMes}</td>
                     </tr>
                   ))}
                 </tbody>
