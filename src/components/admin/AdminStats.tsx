@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import StatsCard from "@/components/ui/stats-card";
-import { BarChart3, Users, MapPin, CheckCircle } from "lucide-react";
+import { Building, Users, MapPin, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   ResponsiveContainer, 
@@ -17,20 +17,19 @@ import {
 const AdminStats = () => {
   // Dados simulados para o dashboard
   const [statsData] = useState({
-    totalSales: "R$ 856.320,00",
     totalPDVs: 542,
-    totalUsers: 24,
-    conversionRate: "68%",
+    totalFiliais: 4,
+    totalSupervisores: 12,
     missionsCompleted: 857
   });
 
   // Dados simulados para gráficos por região
   const [regionData] = useState([
-    { name: "Zona Sul", vendas: 423110, conversoes: 87, pdvs: 124 },
-    { name: "Zona Oeste", vendas: 210500, conversoes: 65, pdvs: 98 },
-    { name: "Centro", vendas: 180320, conversoes: 42, pdvs: 102 },
-    { name: "Zona Norte", vendas: 142300, conversoes: 38, pdvs: 118 },
-    { name: "Zona Leste", vendas: 100090, conversoes: 25, pdvs: 100 }
+    { name: "Zona Sul", pontos: 423, conversoes: 87, pdvs: 124 },
+    { name: "Zona Oeste", pontos: 325, conversoes: 65, pdvs: 98 },
+    { name: "Centro", pontos: 280, conversoes: 42, pdvs: 102 },
+    { name: "Zona Norte", pontos: 210, conversoes: 38, pdvs: 118 },
+    { name: "Zona Leste", pontos: 175, conversoes: 25, pdvs: 100 }
   ]);
 
   return (
@@ -40,37 +39,38 @@ const AdminStats = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard 
-          title="Total em Vendas" 
-          value={statsData.totalSales} 
-          icon={<BarChart3 />} 
-          trend={{ value: 12, label: "vs. mês anterior", positive: true }}
+          title="Filiais" 
+          value={statsData.totalFiliais} 
+          icon={<Building />} 
+          trend={{ value: 5, label: "novas este mês", positive: true }}
         />
         <StatsCard 
-          title="Total de PDVs" 
+          title="Supervisores" 
+          value={statsData.totalSupervisores} 
+          icon={<Users />} 
+          trend={{ value: 2, label: "novos este mês", positive: true }}
+        />
+        <StatsCard 
+          title="PDVs" 
           value={statsData.totalPDVs} 
           icon={<MapPin />} 
-          trend={{ value: 5, label: "novos este mês", positive: true }}
-        />
-        <StatsCard 
-          title="Usuários Ativos" 
-          value={statsData.totalUsers} 
-          icon={<Users />} 
+          trend={{ value: 8, label: "novos este mês", positive: true }}
         />
         <StatsCard 
           title="Missões Concluídas" 
           value={statsData.missionsCompleted} 
           icon={<CheckCircle />} 
-          trend={{ value: 8, label: "vs. mês anterior", positive: true }}
+          trend={{ value: 12, label: "este mês", positive: true }}
         />
       </div>
 
-      {/* Gráfico de Desempenho por Região */}
+      {/* Gráfico de Desempenho por Região - Melhorado */}
       <Card className="bg-tactical-darkgray/80 border-heineken/30">
         <CardHeader>
           <CardTitle className="text-lg font-medium text-white">Desempenho por Região</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-80 w-full">
+          <div className="h-96 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={regionData}
@@ -78,20 +78,57 @@ const AdminStats = () => {
                   top: 20,
                   right: 30,
                   left: 20,
-                  bottom: 5,
+                  bottom: 20,
                 }}
+                barGap={8}
+                barSize={32}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis dataKey="name" tick={{ fill: '#ccc' }} />
-                <YAxis tick={{ fill: '#ccc' }} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#222', border: '1px solid #444' }} 
-                  labelStyle={{ color: '#ccc' }}
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fill: '#ccc' }} 
+                  tickLine={{ stroke: '#555' }}
+                  axisLine={{ stroke: '#555' }}
                 />
-                <Legend wrapperStyle={{ color: '#ccc' }} />
-                <Bar dataKey="vendas" name="Vendas (R$)" fill="#8eff00" />
-                <Bar dataKey="conversoes" name="Conversões" fill="#28a745" />
-                <Bar dataKey="pdvs" name="PDVs" fill="#007bff" />
+                <YAxis 
+                  tick={{ fill: '#ccc' }} 
+                  tickLine={{ stroke: '#555' }}
+                  axisLine={{ stroke: '#555' }}
+                />
+                <Tooltip 
+                  formatter={(value, name) => {
+                    if (name === "pontos") return [`${value} pontos`, "Pontos"];
+                    if (name === "conversoes") return [`${value}%`, "Conversões"];
+                    if (name === "pdvs") return [`${value}`, "PDVs"];
+                    return [value, name];
+                  }}
+                  contentStyle={{ backgroundColor: '#222', border: '1px solid #444' }} 
+                  labelStyle={{ color: '#ccc', fontWeight: 'bold' }}
+                  itemStyle={{ padding: '4px 0' }}
+                />
+                <Legend 
+                  wrapperStyle={{ color: '#ccc', paddingTop: '15px' }} 
+                  iconType="circle"
+                  iconSize={10}
+                />
+                <Bar 
+                  dataKey="pontos" 
+                  name="Pontos" 
+                  fill="#8eff00" 
+                  radius={[4, 4, 0, 0]} 
+                />
+                <Bar 
+                  dataKey="conversoes" 
+                  name="Conversões (%)" 
+                  fill="#28a745" 
+                  radius={[4, 4, 0, 0]} 
+                />
+                <Bar 
+                  dataKey="pdvs" 
+                  name="PDVs" 
+                  fill="#007bff" 
+                  radius={[4, 4, 0, 0]} 
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -106,7 +143,7 @@ const AdminStats = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-center h-40">
-              <div className="text-6xl font-bold text-heineken-neon">{statsData.conversionRate}</div>
+              <div className="text-6xl font-bold text-heineken-neon">68%</div>
             </div>
             <p className="text-sm text-center text-tactical-silver">
               Meta mensal: 70% | Progresso: 97%
@@ -116,7 +153,7 @@ const AdminStats = () => {
         
         <Card className="bg-tactical-darkgray/80 border-heineken/30">
           <CardHeader>
-            <CardTitle className="text-lg font-medium text-white">Progresso de Vendas</CardTitle>
+            <CardTitle className="text-lg font-medium text-white">Progresso de Pontos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
