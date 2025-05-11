@@ -13,8 +13,7 @@ const filiaisData = [
     nome: "São Paulo - Capital", 
     quantidadeSupervisores: 4, 
     quantidadeVendedores: 16, 
-    pdvs: 340, 
-    vendasTotal: "R$ 452.780,00", 
+    pontos: 340, 
     conversao: "72%" 
   },
   { 
@@ -22,8 +21,7 @@ const filiaisData = [
     nome: "ABC Paulista", 
     quantidadeSupervisores: 3, 
     quantidadeVendedores: 12, 
-    pdvs: 220, 
-    vendasTotal: "R$ 318.450,00", 
+    pontos: 220, 
     conversao: "68%" 
   },
   { 
@@ -31,8 +29,7 @@ const filiaisData = [
     nome: "Campinas", 
     quantidadeSupervisores: 2, 
     quantidadeVendedores: 8, 
-    pdvs: 180, 
-    vendasTotal: "R$ 264.320,00", 
+    pontos: 180, 
     conversao: "65%" 
   },
   { 
@@ -40,8 +37,7 @@ const filiaisData = [
     nome: "Litoral", 
     quantidadeSupervisores: 2, 
     quantidadeVendedores: 8, 
-    pdvs: 150, 
-    vendasTotal: "R$ 198.670,00", 
+    pontos: 150, 
     conversao: "63%" 
   }
 ];
@@ -103,17 +99,13 @@ const AdminFiliais = () => {
                     <p className="text-xl font-semibold text-white">{filial.quantidadeVendedores}</p>
                   </div>
                   <div className="text-tactical-silver">
-                    <p className="text-sm">PDVs</p>
-                    <p className="text-xl font-semibold text-white">{filial.pdvs}</p>
+                    <p className="text-sm">Pontos</p>
+                    <p className="text-xl font-semibold text-white">{filial.pontos}</p>
                   </div>
                   <div className="text-tactical-silver">
                     <p className="text-sm">Conversão</p>
                     <p className="text-xl font-semibold text-heineken">{filial.conversao}</p>
                   </div>
-                </div>
-                <div className="mt-4 pt-4 border-t border-tactical-darkgray/30">
-                  <p className="text-sm text-tactical-silver">Total em Vendas</p>
-                  <p className="text-xl font-bold text-heineken">{filial.vendasTotal}</p>
                 </div>
               </CardContent>
             </Card>

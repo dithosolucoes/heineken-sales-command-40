@@ -19,32 +19,32 @@ import {
 // Dados de exemplo para supervisores de uma filial
 const supervisoresData = {
   1: [
-    { id: 101, nome: "Carlos Silva", vendedores: 4, pdvs: 85, conversao: "75%" },
-    { id: 102, nome: "Ana Oliveira", vendedores: 4, pdvs: 90, conversao: "71%" },
-    { id: 103, nome: "Roberto Almeida", vendedores: 4, pdvs: 82, conversao: "68%" },
-    { id: 104, nome: "Juliana Santos", vendedores: 4, pdvs: 83, conversao: "65%" }
+    { id: 101, nome: "Carlos Silva", vendedores: 4, pontos: 85, conversao: "75%" },
+    { id: 102, nome: "Ana Oliveira", vendedores: 4, pontos: 90, conversao: "71%" },
+    { id: 103, nome: "Roberto Almeida", vendedores: 4, pontos: 82, conversao: "68%" },
+    { id: 104, nome: "Juliana Santos", vendedores: 4, pontos: 83, conversao: "65%" }
   ],
   2: [
-    { id: 201, nome: "Marcos Pereira", vendedores: 4, pdvs: 75, conversao: "70%" },
-    { id: 202, nome: "Fernanda Lima", vendedores: 4, pdvs: 72, conversao: "67%" },
-    { id: 203, nome: "Ricardo Costa", vendedores: 4, pdvs: 73, conversao: "66%" }
+    { id: 201, nome: "Marcos Pereira", vendedores: 4, pontos: 75, conversao: "70%" },
+    { id: 202, nome: "Fernanda Lima", vendedores: 4, pontos: 72, conversao: "67%" },
+    { id: 203, nome: "Ricardo Costa", vendedores: 4, pontos: 73, conversao: "66%" }
   ],
   3: [
-    { id: 301, nome: "Leonardo Martins", vendedores: 4, pdvs: 90, conversao: "72%" },
-    { id: 302, nome: "Cristina Barbosa", vendedores: 4, pdvs: 90, conversao: "68%" }
+    { id: 301, nome: "Leonardo Martins", vendedores: 4, pontos: 90, conversao: "72%" },
+    { id: 302, nome: "Cristina Barbosa", vendedores: 4, pontos: 90, conversao: "68%" }
   ],
   4: [
-    { id: 401, nome: "Paulo Ferreira", vendedores: 4, pdvs: 75, conversao: "64%" },
-    { id: 402, nome: "Mariana Dias", vendedores: 4, pdvs: 75, conversao: "62%" }
+    { id: 401, nome: "Paulo Ferreira", vendedores: 4, pontos: 75, conversao: "64%" },
+    { id: 402, nome: "Mariana Dias", vendedores: 4, pontos: 75, conversao: "62%" }
   ]
 };
 
 // Dados de exemplo para filiais
 const filiaisData = {
-  1: { nome: "São Paulo - Capital", pdvs: 340, conversao: "72%" },
-  2: { nome: "ABC Paulista", pdvs: 220, conversao: "68%" },
-  3: { nome: "Campinas", pdvs: 180, conversao: "65%" },
-  4: { nome: "Litoral", pdvs: 150, conversao: "63%" }
+  1: { nome: "São Paulo - Capital", pontos: 340, conversao: "72%" },
+  2: { nome: "ABC Paulista", pontos: 220, conversao: "68%" },
+  3: { nome: "Campinas", pontos: 180, conversao: "65%" },
+  4: { nome: "Litoral", pontos: 150, conversao: "63%" }
 };
 
 // Dados de exemplo para o gráfico
@@ -68,15 +68,19 @@ const AdminFilialDetalhe = () => {
     if (filialId) {
       const filialIdNumber = parseInt(filialId, 10);
       
-      if (filiaisData[filialIdNumber as keyof typeof filiaisData]) {
-        setFilial(filiaisData[filialIdNumber as keyof typeof filiaisData]);
+      // Usando type assertion para ajudar o TypeScript
+      const filialKey = filialIdNumber as keyof typeof filiaisData;
+      const supervisoresKey = filialIdNumber as keyof typeof supervisoresData;
+      
+      if (filiaisData[filialKey]) {
+        setFilial(filiaisData[filialKey]);
         setDesempenhoData(getDesempenhoData(filialIdNumber));
         
-        if (supervisoresData[filialIdNumber as keyof typeof supervisoresData]) {
-          setSupervisores(supervisoresData[filialIdNumber as keyof typeof supervisoresData]);
+        if (supervisoresData[supervisoresKey]) {
+          setSupervisores(supervisoresData[supervisoresKey]);
         }
         
-        document.title = `Filial: ${filiaisData[filialIdNumber as keyof typeof filiaisData].nome} | Admin | Heineken SP SUL`;
+        document.title = `Filial: ${filiaisData[filialKey].nome} | Admin | Heineken SP SUL`;
       } else {
         navigate("/admin/filiais");
       }
@@ -101,7 +105,7 @@ const AdminFilialDetalhe = () => {
               <CardTitle className="text-sm font-medium text-tactical-silver">Pontos</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-3xl font-bold text-white">{filial.pdvs}</p>
+              <p className="text-3xl font-bold text-white">{filial.pontos}</p>
             </CardContent>
           </Card>
           
@@ -187,7 +191,7 @@ const AdminFilialDetalhe = () => {
                       </div>
                       <div className="text-tactical-silver">
                         <p className="text-xs">Pontos</p>
-                        <p className="text-sm font-semibold text-white">{supervisor.pdvs}</p>
+                        <p className="text-sm font-semibold text-white">{supervisor.pontos}</p>
                       </div>
                       <div className="text-tactical-silver col-span-2">
                         <p className="text-xs">Conversão</p>
